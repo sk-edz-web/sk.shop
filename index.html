@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SK Edz | Professional Video & Image Editing</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            color: #333;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ff4757;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+
+        .logo i {
+            margin-right: 10px;
+            color: #ff4757;
+        }
+
+        .logo span {
+            color: #2f3542;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            color: #2f3542;
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 16px;
+            padding: 5px 0;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #ff4757;
+        }
+
+        nav ul li a.active {
+            color: #ff4757;
+        }
+
+        nav ul li a.active:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #ff4757;
+            border-radius: 2px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 18px;
+            margin-bottom: 30px;
+            opacity: 0.9;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            background: #ff4757;
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 16px;
+            transition: all 0.3s;
+            border: 2px solid #ff4757;
+        }
+
+        .btn:hover {
+            background: transparent;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(255, 71, 87, 0.2);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid white;
+            margin-left: 15px;
+        }
+
+        .btn-outline:hover {
+            background: white;
+            color: #764ba2;
+        }
+
+        /* Features Section */
+        .section-title {
+            text-align: center;
+            margin-bottom: 60px;
+            padding-top: 80px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            color: #2f3542;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: #ff4757;
+        }
+
+        .section-title p {
+            color: #747d8c;
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 18px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            padding-bottom: 80px;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+        }
+
+       .feature-card i {
+    font-size: 48px;
+    margin-bottom: 25px;
+    background: linear-gradient(135deg, #ff6b81, #ff4757);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent; /* Changed from -webkit-text-fill-color to color */
+}
+
+        .feature-card h3 {
+            font-size: 22px;
+            color: #2f3542;
+            margin-bottom: 15px;
+        }
+
+        .feature-card p {
+            color: #747d8c;
+        }
+
+        /* Testimonials */
+        .testimonials {
+            background: #f1f2f6;
+            padding-bottom: 80px;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: white;
+            padding: 40px 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.05);
+            position: relative;
+        }
+
+        .testimonial-card:before {
+            content: '"';
+            font-size: 80px;
+            color: #ff4757;
+            position: absolute;
+            top: 20px;
+            left: 30px;
+            opacity: 0.2;
+            font-family: Georgia, serif;
+        }
+
+        .testimonial-card .quote {
+            font-size: 16px;
+            color: #2f3542;
+            margin-bottom: 25px;
+            line-height: 1.7;
+            position: relative;
+            z-index: 1;
+        }
+
+        .client {
+            display: flex;
+            align-items: center;
+        }
+
+        .client-info h4 {
+            font-size: 18px;
+            color: #2f3542;
+            margin-bottom: 5px;
+        }
+
+        .client-info p {
+            color: #747d8c;
+            font-size: 14px;
+        }
+
+        /* Footer */
+        footer {
+            background: #2f3542;
+            color: white;
+            padding: 80px 0 30px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: white;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: #ff4757;
+        }
+
+        .footer-column p {
+            color: #a4b0be;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-column ul li a {
+            color: #a4b0be;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-column ul li a:hover {
+            color: #ff4757;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .social-links a:hover {
+            background: #ff4757;
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #a4b0be;
+            font-size: 14px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            nav ul {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            nav ul li {
+                margin: 0 15px 10px;
+            }
+
+            .hero h1 {
+                font-size: 36px;
+            }
+
+            .section-title h2 {
+                font-size: 30px;
+            }
+
+            .btn {
+                padding: 12px 25px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero {
+                padding: 60px 0;
+            }
+
+            .hero h1 {
+                font-size: 28px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .feature-card, .testimonial-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <i class="fas fa-play-circle"></i>
+                    SK<span>Edz</span>
+                </a>
+                <nav>
+                    <ul>
+                        <li><a href="index.html" class="active">Home</a></li>
+                        <li><a href="buy.html">Services</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Professional Video & Image Editing</h1>
+                <p>Transform your content with premium editing services. We specialize in video editing, color grading, logo design, and creative media solutions for businesses and creators.</p>
+                <div>
+                    <a href="buy.html" class="btn">View Services</a>
+                    <a href="contact.html" class="btn btn-outline">Contact Us</a>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Features Section -->
+    <section class="features">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Services</h2>
+                <p>We offer comprehensive editing solutions to elevate your digital content</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-video"></i>
+                    <h3>Video Editing</h3>
+                    <p>Professional video editing, color correction, CC addition, and complete video transformation services.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-image"></i>
+                    <h3>Image Editing</h3>
+                    <p>High-quality image editing, object removal, color grading, and creative manipulation.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-paint-brush"></i>
+                    <h3>Logo & Thumbnail</h3>
+                    <p>Custom logo design and eye-catching thumbnail creation for YouTube and social media.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <i class="fas fa-sync-alt"></i>
+                    <h3>Content Rework</h3>
+                    <p>Revamp existing content with music changes, enhancements, and quality improvements.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Testimonials Section -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-title">
+                <h2>Client Reviews</h2>
+                <p>What our clients say about our editing services</p>
+            </div>
+            
+            <div class="testimonials-grid">
+                <!-- Testimonial 1 -->
+                <div class="testimonial-card">
+                    <p class="quote">SK Edz completely transformed my YouTube videos. The color grading and editing quality brought my content to a professional level. Highly recommended!</p>
+                    <div class="client">
+                        <div class="client-info">
+                            <h4>Aarav Sharma</h4>
+                            <p>YouTube Content Creator</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="testimonial-card">
+                    <p class="quote">The logo design and thumbnail service helped increase my channel's click-through rate by 30%. Professional work at reasonable prices.</p>
+                    <div class="client">
+                        <div class="client-info">
+                            <h4>Priya Patel</h4>
+                            <p>Travel Vlogger</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="testimonial-card">
+                    <p class="quote">Their video rework service saved my promotional content. Fast delivery and excellent communication throughout the project.</p>
+                    <div class="client">
+                        <div class="client-info">
+                            <h4>Rohan Mehta</h4>
+                            <p>Business Owner</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>SK Edz</h3>
+                    <p>Professional video and image editing services. We help creators and businesses elevate their digital content with premium editing solutions.</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/sk_edz_007?igsh=Nmw3ZdBuc290Z3d4">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                        <a href="https://youtube.com/@sk_edz_001?si=MdLJbSBBtfoonppU">
+                            <i class="fab fa-youtube"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Our Services</h3>
+                    <ul>
+                        <li><a href="buy.html">Video Editing</a></li>
+                        <li><a href="buy.html">Color Grading</a></li>
+                        <li><a href="buy.html">Logo Design</a></li>
+                        <li><a href="buy.html">Thumbnail Making</a></li>
+                        <li><a href="buy.html">Content Rework</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="buy.html">Services</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <ul>
+                        <li><a href="tel:+919345306572"><i class="fas fa-phone"></i> +91 9345306572</a></li>
+                        <li><a href="mailto:skedz.contact@gmail.com"><i class="fas fa-envelope"></i> skedz.contact@gmail.com</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Trichy, Tamil Nadu</li>
+                        <li><i class="fas fa-clock"></i> Mon-Sat: 10AM - 8PM</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 SK Edz. All rights reserved. | Professional Video & Image Editing Services</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
