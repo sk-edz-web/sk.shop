@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sk Shop | Premium Products</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="shortcut icon" href="WhatsApp Image 2025-08-18 at 16.00.20_ae9954eb.jpg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header Styles */
+        header {
+            padding: 20px 0;
+            background: white;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ff4757;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 10px;
+            color: #ff4757;
+        }
+        
+        .logo span {
+            color: #2f3542;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+        
+        nav ul li {
+            margin-left: 25px;
+        }
+        
+        nav ul li a {
+            color: #2f3542;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
+            position: relative;
+        }
+        
+        nav ul li a:hover {
+            color: #ff4757;
+        }
+        
+        nav ul li a.active {
+            color: #ff4757;
+        }
+        
+        nav ul li a.active:after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: #ff4757;
+            border-radius: 2px;
+        }
+        
+        .cart-icon {
+            position: relative;
+            font-size: 20px;
+            color: #2f3542;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .cart-icon:hover {
+            color: #ff4757;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #ff4757;
+            color: white;
+            font-size: 12px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        /* Hero Section */
+        .shop-hero {
+            padding: 80px 0;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            margin-bottom: 60px;
+        }
+        
+        .shop-hero h1 {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 20px;
+            line-height: 1.2;
+        }
+        
+        .shop-hero p {
+            font-size: 18px;
+            max-width: 600px;
+            margin: 0 auto;
+            opacity: 0.9;
+        }
+        
+        /* Products Section */
+        .products-section {
+            padding: 60px 0;
+        }
+        
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .section-title h2 {
+            font-size: 36px;
+            color: #2f3542;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .section-title h2:after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: #ff4757;
+        }
+        
+        .section-title p {
+            color: #747d8c;
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 18px;
+        }
+        
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        /* WhatsApp Promotion Card */
+        .whatsapp-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            position: relative;
+            grid-column: span 1;
+        }
+        
+        .whatsapp-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .whatsapp-card-image {
+            position: relative;
+            overflow: hidden;
+            height: 250px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .whatsapp-card-image i {
+            font-size: 80px;
+            color: white;
+            opacity: 0.9;
+        }
+        
+        .whatsapp-card-badge {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            background: #ff4757;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 2;
+        }
+        
+        .whatsapp-card-content {
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .whatsapp-card-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #2f3542;
+        }
+        
+        .whatsapp-card-description {
+            color: #666;
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .whatsapp-card-features {
+            text-align: left;
+            margin: 20px 0;
+            padding-left: 20px;
+        }
+        
+        .whatsapp-card-features li {
+            margin-bottom: 10px;
+            color: #666;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .whatsapp-card-features li:before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            color: #25D366;
+            font-weight: bold;
+        }
+        
+        .whatsapp-card-btn {
+            display: inline-block;
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+        }
+        
+        .whatsapp-card-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+        }
+        
+        /* Empty Spaces for Future Cards */
+        .empty-card {
+            background: transparent;
+            border: 3px dashed #e2e8f0;
+            border-radius: 15px;
+            min-height: 450px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .empty-card:hover {
+            border-color: #ff4757;
+            background: rgba(255, 71, 87, 0.05);
+        }
+        
+        .empty-card-content {
+            text-align: center;
+            padding: 20px;
+        }
+        
+        .empty-card-icon {
+            font-size: 48px;
+            color: #a4b0be;
+            margin-bottom: 20px;
+        }
+        
+        .empty-card-text {
+            color: #747d8c;
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        /* Coupon Section */
+        .coupon-section {
+            background: white;
+            padding: 50px 0;
+            margin: 60px 0;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+        }
+        
+        .coupon-container {
+            max-width: 600px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .coupon-container h3 {
+            font-size: 28px;
+            margin-bottom: 15px;
+            color: #2f3542;
+        }
+        
+        .coupon-container p {
+            margin-bottom: 20px;
+            color: #666;
+            font-size: 18px;
+        }
+        
+        .coupon-code {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b81, #ff4757);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 20px;
+            letter-spacing: 1px;
+            margin: 10px 0;
+        }
+        
+        /* Footer */
+        footer {
+            background: #2f3542;
+            color: white;
+            padding: 80px 0 30px;
+            margin-top: 80px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 50px;
+        }
+        
+        .footer-column h3 {
+            font-size: 20px;
+            margin-bottom: 25px;
+            color: white;
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        .footer-column h3:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: #ff4757;
+        }
+        
+        .footer-column p {
+            color: #a4b0be;
+            line-height: 1.7;
+            margin-bottom: 20px;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 12px;
+        }
+        
+        .footer-column ul li a {
+            color: #a4b0be;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column ul li a:hover {
+            color: #ff4757;
+        }
+        
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .social-links a:hover {
+            background: #ff4757;
+            transform: translateY(-3px);
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: #a4b0be;
+            font-size: 14px;
+        }
+        
+        /* Toast Notification */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #4CAF50;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: transform 0.3s, opacity 0.3s;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast i {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 0 15px 10px;
+            }
+            
+            .shop-hero h1 {
+                font-size: 36px;
+            }
+            
+            .section-title h2 {
+                font-size: 30px;
+            }
+            
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .shop-hero {
+                padding: 60px 0;
+            }
+            
+            .shop-hero h1 {
+                font-size: 28px;
+            }
+            
+            .product-card-buttons {
+                flex-direction: column;
+            }
+            
+            .product-card-btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a href="index.html" class="logo">
+                    <i class="fas fa-play-circle"></i>
+                    SK<span>Editz</span>
+                </a>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="buy.html" class="active">Shop</a></li>
+                        <li><a href="about.html">About</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </nav>
+                <a href="cart.html" class="cart-icon">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span class="cart-count" id="cart-count">0</span>
+                </a>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Hero Section -->
+    <section class="shop-hero">
+        <div class="container">
+            <h1>Premium Products Collection</h1>
+            <p>Discover our exclusive range of digital services and products with exceptional quality</p>
+        </div>
+    </section>
+    
+    <!-- Products Section -->
+    <section class="products-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>promotion Products</h2>
+                <p>happy Shopping with your team.</p>
+            </div>
+            
+            <div class="products-grid">
+                <!-- WhatsApp Promotion Card -->
+                <div class="whatsapp-card">
+                    <div class="whatsapp-card-image">
+                        <div class="whatsapp-card-badge">Fast Response</div>
+                        <i class="fab fa-whatsapp"></i>
+                    </div>
+                    <div class="whatsapp-card-content">
+                        <h3 class="whatsapp-card-title">Apply for Promotion via WhatsApp</h3>
+                        <p class="whatsapp-card-description">Get your products featured on our platform. Message us directly on WhatsApp for quick response!</p>
+                        
+                        <ul class="whatsapp-card-features">
+                            <li>Direct WhatsApp chat</li>
+                            <li>Quick response within hours</li>
+                            <li>7-day promotion period</li>
+                            <li>Featured on homepage & social media</li>
+                        </ul>
+                        
+                        <!-- WhatsApp Link -->
+                        <a href="https://wa.me/919345306572?text=Hello%20SK%20Editz%2C%20I%20want%20to%20apply%20for%20product%20promotion.%0A%0AName%3A%20%5BEnter%20your%20name%20here%5D%0AContact%3A%20%5BPhone%20or%20Email%5D%0AProduct%20Type%3A%20%5BDescribe%20your%20product%5D%0ADescription%3A%20%5BEnter%20detailed%20description%20here%5D" 
+                           class="whatsapp-card-btn" 
+                           target="_blank">
+                            <i class="fab fa-whatsapp"></i> Message on WhatsApp
+                        </a>
+                    </div>
+                </div>
+                
+            
+    </section>
+    
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>SK Editz Shop</h3>
+                    <p>Premium digital services and products with exceptional quality and customer satisfaction.</p>
+                    <div class="social-links">
+                        <a href="https://www.instagram.com/sk_edz_007" target="_blank"><i class="fab fa-instagram"></i></a>
+                        <a href="https://youtube.com/@sk_edz_001" target="_blank"><i class="fab fa-youtube"></i></a>
+                        <a href="https://wa.me/919345306572" target="_blank"><i class="fab fa-whatsapp"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="index.html">Home</a></li>
+                        <li><a href="buy.html">Shop</a></li>
+                        <li><a href="frames.html">Frames</a></li>
+                        <li><a href="about.html">About Us</a></li>
+                        <li><a href="contact.html">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact</h3>
+                    <ul>
+                        <li><a href="https://wa.me/919345306572" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp: +91 9345306572</a></li>
+                        <li><a href="mailto:skedz.contact@gmail.com"><i class="fas fa-envelope"></i> skedz.contact@gmail.com</a></li>
+                        <li><i class="fas fa-map-marker-alt"></i> Trichy, Tamil Nadu</li>
+                        <li><i class="fas fa-clock"></i> Mon-Sat: 10AM - 8PM</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 SK Editz Shop. All rights reserved. | Premium Digital Services</p>
+            </div>
+        </div>
+    </footer>
+    
+    <!-- Toast Notification -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toast-message">Product added to cart!</span>
+    </div>
+    
+    <script>
+        // Cart functionality
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        
+        // Update cart count
+        function updateCartCount() {
+            const cartCount = document.getElementById('cart-count');
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            cartCount.textContent = totalItems;
+        }
+        
+        // Toast notification function
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toast-message');
+            
+            toastMessage.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Empty card click handler - you can add your own functionality here
+        document.querySelectorAll('.empty-card').forEach(card => {
+            card.addEventListener('click', function() {
+                showToast('You can add your product card here!');
+                // You can add your own product card HTML here later
+            });
+        });
+        
+        // Initialize cart count on page load
+        updateCartCount();
+    </script>
+</body>
+</html>
