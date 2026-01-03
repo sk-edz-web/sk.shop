@@ -6,7 +6,6 @@
     <title>sk Shop | Premium Products</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="shortcut icon" href="WhatsApp Image 2025-08-18 at 16.00.20_ae9954eb.jpg">
-    <link rel="stylesheet" href="card.css">
     <style>
         * {
             margin: 0;
@@ -448,101 +447,6 @@
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
         }
         
-        /* Golden Card Styles - FIXED FOR MOBILE */
-        .golden-card {
-            background: linear-gradient(135deg, #FFD700 0%, #B8860B 100%);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            position: relative;
-            grid-column: span 1;
-        }
-        
-        .golden-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 35px rgba(184, 134, 11, 0.3);
-        }
-        
-        .golden-card .product-card-image {
-            position: relative;
-            overflow: hidden;
-            height: 250px;
-        }
-        
-        .golden-card .product-card-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-        
-        .golden-card:hover .product-card-image img {
-            transform: scale(1.05);
-        }
-        
-        .golden-content {
-            padding: 25px;
-        }
-        
-        .golden-title {
-            font-size: 20px;
-            font-weight: 600;
-            margin-bottom: 10px;
-            color: #2f3542;
-        }
-        
-        .golden-card .product-card-description {
-            color: #333;
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 15px;
-            height: 42px;
-            overflow: hidden;
-        }
-        
-        .golden-card .product-card-price {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .golden-card .product-card-current-price {
-            font-size: 24px;
-            font-weight: 700;
-            color: #2f3542;
-            margin-right: 10px;
-        }
-        
-        .golden-card .product-card-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .golden-card .product-card-btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-        }
-        
-        .golden-card .product-card-btn-primary {
-            background: linear-gradient(135deg, #2f3542, #1a1e27);
-            color: white;
-        }
-        
-        .golden-card .product-card-btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(47, 53, 66, 0.3);
-        }
-        
         /* Coupon Section */
         .coupon-section {
             background: white;
@@ -727,19 +631,6 @@
             .products-grid {
                 grid-template-columns: 1fr;
             }
-            
-            /* Golden card mobile fixes */
-            .golden-card {
-                grid-column: span 1;
-            }
-            
-            .golden-card .product-card-buttons {
-                flex-direction: column;
-            }
-            
-            .golden-card .product-card-btn {
-                width: 100%;
-            }
         }
         
         @media (max-width: 480px) {
@@ -757,15 +648,6 @@
             
             .product-card-btn {
                 width: 100%;
-            }
-            
-            /* Golden card small screen fixes */
-            .golden-content {
-                padding: 20px;
-            }
-            
-            .golden-title {
-                font-size: 18px;
             }
         }
     </style>
@@ -807,7 +689,7 @@
     <section class="products-section">
         <div class="container">
             <div class="section-title">
-                <h2>other creators</h2>
+                <h2>Our Products</h2>
                 <p>happy Shopping.</p>
             </div>
             
@@ -815,55 +697,66 @@
                 <!-- Product 1: Advertisement -->
                 <div class="product-card">
                     <div class="product-card-image">
-                        <div class="product-card-badge">creator @nowfal_efx</div>
+                        
                         <div class="product-card-wishlist" data-product="Advertisement">
                             <i class="far fa-heart"></i>
                         </div>
-                        <img src="nowfal.2.jpg" alt="advertisement">
+                        <img src="nowfal.2.jpg" alt="Ae cc">
                     </div>
                     <div class="product-card-content">
-                        <h3 class="product-card-title">After effect cc</h3>
-                        <p class="product-card-description">Ae 4k cc at just 299 this helps to enhance your video quality .</p>
+                        <h3 class="product-card-title">Ae cc</h3>
+                        <h1 class="product-card-description">After effect cc 4k creator nowfal_efx .</h1>
                         <div class="product-card-price">
                             <span class="product-card-current-price">₹299</span>
+                        
                         </div>
-                        <div class="product-card-rating">
-                            <div class="product-card-stars">
-                            </div>
-                        </div>
+                        
                         <div class="product-card-buttons">
-                            <button class="product-card-btn product-card-btn-primary add-to-cart" data-product="After effect cc" data-price="299">
+                            <button class="product-card-btn product-card-btn-primary add-to-cart" data-product="Ae cc" data-price="299">
                                 <i class="fas fa-shopping-cart"></i> Add to Cart
                             </button>
                         </div>
                     </div>
                 </div>
-
-                <!-- Golden Card: Join as member -->
-                <div class="golden-card">
-                    <div class="product-card-image"> 
-                        <div class="product-card-wishlist" data-product="Join as member">
-                            <i class="far fa-heart"></i>
-                        </div>
-                        <img src="logo.jpg" alt="Join as member">
-                    </div>
-                    <div class="golden-content">
-                        <h3 class="golden-title">Join as a member</h3>
-                        <p class="product-card-description">Open your shop on sk edz shop starting from 99/- only.</p>
-                        <div class="product-card-price">
-                            <span class="product-card-current-price">Plan start from ₹99</span>
-                        </div>
-                        <div class="product-card-rating">
-                            <div class="product-card-stars">
-                            </div>
-                        </div>
-                        <div class="product-card-buttons">
-                            <button class="product-card-btn product-card-btn-primary add-to-cart" data-product="Join as Member" data-price="99">
-                                <i class="fas fa-user-plus"></i> Join Now
-                            </button>
-                        </div>
-                    </div>
-                </div>
+                
+                
+                <!-- Special Card: Buy Frames -->
+              <div class="product-card">
+    <div class="product-card-image">
+        
+        <div class="product-card-wishlist" data-product="Golden Membership">
+            <i class="far fa-heart"></i>
+        </div>
+        <!-- Placeholder for an image. Replace the src with your own. -->
+        <img src="logo.jpg" alt="Golden Membership Plans">
+    </div>
+    <div class="product-card-content">
+        <h3 class="product-card-title">Golden Membership</h3>
+        <p class="product-card-description">Unlock premium features with our exclusive golden membership plans. Choose from Basic, Premium, or Golden VIP.</p>
+        
+        <div class="product-card-price">
+            <span class="product-card-current-price">From ₹99/month</span>
+        </div>
+        
+        <div class="product-card-rating">
+            <div class="product-card-stars">
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star"></i>
+                <i class="fas fa-star-half-alt"></i>
+            </div>
+            <span class="product-card-reviews">Premium Benefits</span>
+        </div>
+        
+        <div class="product-card-buttons">
+            <a href="https://sk-edz-web.github.io/subscribe/" target="_blank" class="product-card-btn product-card-btn-primary">
+                <i class="fas fa-crown"></i> View Plans
+            </a>
+            
+        </div>
+    </div>
+</div>
             </div>
         </div>
     </section>
