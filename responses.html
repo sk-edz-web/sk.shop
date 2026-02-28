@@ -504,6 +504,63 @@
       from { transform: translate(-50%, 20px); opacity: 0; }
       to { transform: translate(-50%, 0); opacity: 1; }
     }
+    /* --- Primary Button --- */
+.btn-primary {
+  background: rgba(43, 98, 142, 0.85);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 60px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: 0.2s;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px; /* Spaces the icon from the text */
+}
+.btn-primary:hover {
+  background: #1e5a88;
+  transform: scale(1.02);
+}
+
+/* --- Secondary Button --- */
+.btn-secondary {
+  background: rgba(255, 255, 255, 0.5);
+  color: #13293D;
+  border: 1px solid white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 60px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none; /* In case you use it on an <a> tag */
+}
+.btn-secondary:hover {
+  background: white;
+}
+
+/* --- Small Action Button --- */
+.action-btn {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid white;
+  padding: 0.4rem 1rem;
+  border-radius: 40px;
+  cursor: pointer;
+  transition: 0.15s;
+  margin-right: 0.5rem;
+  color: #13293D;
+}
+.action-btn:hover {
+  background: white;
+}
+.action-btn.delete {
+  color: #c13b6f; /* Red color for delete actions */
+}
     /* Loading Spinner */
     .loading-spinner {
       display: inline-block;
@@ -602,14 +659,10 @@
         <i class="fas fa-bolt logo-icon"></i>
         <span class="logo-text">SK EDZ<span style="font-weight:300; color:#2f638f;">/messages</span></span>
       </div>
-      <div class="desktop-actions">
-        <a href="index.html" class="action-btn"><i class="fas fa-home"></i> HOME</a>
-        <a href="buy.html" class="action-btn"><i class="fas fa-shopping-bag"></i> SHOP</a>
-        <a href="wishlist.html" class="action-btn"><i class="fas fa-heart"></i> WISHLIST</a>
-        <a href="cart.html" class="action-btn"><i class="fas fa-shopping-cart"></i> CART</a>
-        <a href="contact.html" class="action-btn"><i class="fas fa-envelope"></i> CONTACT</a>
-        <a href="responses.html" class="action-btn" style="background: #1e5a88; color: white;"><i class="fas fa-inbox"></i> MESSAGES</a>
-      </div>
+
+      <a href="admin.html" class="btn-secondary">
+  <i class="fas fa-user-shield"></i> Admin Panel
+</a>
     </header>
 
     <!-- HERO SECTION -->
@@ -661,15 +714,6 @@
       <i class="fas fa-circle-check" style="color: #2d6f9e;"></i> responses.html · messages from contact form
     </div>
   </div>
-
-  <!-- MOBILE NAVIGATION -->
-  <nav class="mobile-nav">
-    <a href="index.html"><i class="fas fa-home"></i><span>HOME</span></a>
-    <a href="buy.html"><i class="fas fa-shopping-bag"></i><span>SHOP</span></a>
-    <a href="wishlist.html"><i class="fas fa-heart"></i><span>WISHLIST</span></a>
-    <a href="cart.html"><i class="fas fa-shopping-cart"></i><span>CART</span></a>
-    <a href="contact.html"><i class="fas fa-envelope"></i><span>CONTACT</span></a>
-  </nav>
 
   <!-- FULL MESSAGE MODAL -->
   <div class="message-modal-overlay" id="messageModal">
@@ -1075,4 +1119,4 @@
     })();
   </script>
 </body>
-</html>
+</html
