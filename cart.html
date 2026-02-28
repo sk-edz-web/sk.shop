@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>SK EDZ · cart</title>
+  <!-- Font & Icons (same family) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="icon" href="logo.jpg" type="image/png">
+  <style>
+    /* === RESET + GLOBAL (unified with all pages) === */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f4f7fc;
+      background: radial-gradient(circle at 10% 30%, #e9eff7, #dbe5f0);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #1b2b40;
+      line-height: 1.4;
+    }
+    .app {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.2rem 1.8rem;
+      width: 100%;
+      flex: 1;
+    }
+    /* ===== DESKTOP HEADER (no navbar) ===== */
+    .desktop-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0 2rem 0;
+      flex-wrap: wrap;
+    }
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .logo-icon {
+      font-size: 2.2rem;
+      color: #1e3c5c;
+      filter: drop-shadow(0 6px 10px rgba(22, 78, 161, 0.15));
+      animation: softGlow 3s infinite alternate;
+    }
+    @keyframes softGlow {
+      0% { filter: drop-shadow(0 4px 8px rgba(0,60,130,0.2)); }
+      100% { filter: drop-shadow(0 12px 18px rgba(0,90,200,0.35)); }
+    }
+    .logo-text {
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(145deg, #13293D, #1F4E79);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .desktop-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .desktop-actions .action-btn {
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(4px);
+      padding: 0.6rem 1.2rem;
+      border-radius: 60px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #13293D;
+      border: 1px solid rgba(255,255,255,0.7);
+      transition: 0.2s;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .desktop-actions .action-btn i { margin-right: 6px; color: #2c5779; }
+    .desktop-actions .action-btn:hover {
+      background: white;
+      border-color: #a0c6e9;
+      transform: scale(1.02);
+    }
+    /* ----- MOBILE NAVIGATION (hidden on desktop) ----- */
+    .mobile-nav { display: none; }
+    /* ===== CART PAGE SPECIFIC ===== */
+    .cart-hero {
+      margin: 1rem 0 2rem 0;
+    }
+    .cart-hero .badge {
+      background: rgba(43, 108, 176, 0.18);
+      backdrop-filter: blur(3px);
+      display: inline-block;
+      padding: 0.4rem 1.1rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1e4f7a;
+      border: 1px solid rgba(255,255,255,0.5);
+      margin-bottom: 1.2rem;
+    }
+    .cart-hero h1 {
+      font-size: clamp(2.4rem, 7vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      background: linear-gradient(155deg, #102b40, #264e70, #1b3b55);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    .cart-hero p {
+      font-size: 1.1rem;
+      color: #2f4055;
+      font-weight: 300;
+    }
+    /* Cart Layout */
+    .cart-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin: 2rem 0 3rem;
+    }
+    .cart-items {
+      flex: 2 1 500px;
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(8px);
+      border-radius: 48px;
+      padding: 2rem;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 20px 30px -15px rgba(26, 67, 113, 0.2);
+    }
+    .cart-summary {
+      flex: 1 1 280px;
+      background: rgba(255,255,255,0.3);
+      backdrop-filter: blur(8px);
+      border-radius: 48px;
+      padding: 2rem;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 20px 30px -15px rgba(26, 67, 113, 0.2);
+      align-self: flex-start;
+    }
+    .cart-item {
+      display: flex;
+      gap: 1.2rem;
+      padding: 1.2rem 0;
+      border-bottom: 1px solid rgba(255,255,255,0.5);
+    }
+    .cart-item:last-child {
+      border-bottom: none;
+    }
+    .cart-item-image {
+      width: 80px;
+      height: 80px;
+      background: #d0deec;
+      border-radius: 28px;
+      overflow: hidden;
+      border: 1px solid white;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #2c6b9e;
+      font-size: 1.8rem;
+    }
+    .cart-item-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .cart-item-details {
+      flex: 1;
+    }
+    .cart-item-title {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: #13293D;
+    }
+    .cart-item-price {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #1e5a88;
+      margin-top: 0.2rem;
+    }
+    .cart-item-actions {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+    .quantity-btn {
+      background: rgba(255,255,255,0.6);
+      border: 1px solid white;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: 600;
+      transition: 0.15s;
+    }
+    .quantity-btn:hover {
+      background: white;
+    }
+    .item-quantity {
+      font-weight: 600;
+      color: #1d4e75;
+    }
+    .remove-item {
+      background: none;
+      border: none;
+      color: #b0003a;
+      font-size: 1.1rem;
+      cursor: pointer;
+      margin-left: auto;
+      background: rgba(255,255,255,0.4);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: 0.15s;
+    }
+    .remove-item:hover {
+      background: white;
+      color: #c13b6f;
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.2rem;
+      font-size: 1.1rem;
+      color: #2f4055;
+    }
+    .summary-total {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: #102b40;
+      border-top: 1px solid rgba(255,255,255,0.5);
+      padding-top: 1rem;
+      margin-top: 0.5rem;
+    }
+    .checkout-btn {
+      background: rgba(43, 98, 142, 0.85);
+      color: white;
+      border: none;
+      width: 100%;
+      padding: 1rem;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1.2rem;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid rgba(255,255,255,0.4);
+      margin-top: 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .checkout-btn:hover {
+      background: #1e5a88;
+      transform: scale(1.02);
+    }
+    .clear-cart-btn {
+      background: rgba(255,255,255,0.5);
+      border: 1px solid white;
+      padding: 0.6rem 1.2rem;
+      border-radius: 60px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: 0.15s;
+      margin-top: 1rem;
+      width: 100%;
+    }
+    .clear-cart-btn:hover {
+      background: white;
+    }
+    .empty-cart {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #2f5579;
+    }
+    .empty-cart i {
+      font-size: 4rem;
+      color: #2c6b9e;
+      margin-bottom: 1rem;
+      opacity: 0.6;
+    }
+    .empty-cart h3 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #102b40;
+      margin-bottom: 0.5rem;
+    }
+    .continue-shopping {
+      display: inline-block;
+      margin-top: 1.5rem;
+      background: rgba(255,255,255,0.5);
+      padding: 0.8rem 2rem;
+      border-radius: 60px;
+      text-decoration: none;
+      color: #1e5a88;
+      font-weight: 500;
+      border: 1px solid white;
+      transition: 0.15s;
+    }
+    .continue-shopping:hover {
+      background: white;
+    }
+    /* Footer */
+    .footer-note {
+      margin-top: 4rem;
+      padding: 1.8rem 0.5rem;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.6);
+      font-weight: 300;
+      color: #2e5375;
+    }
+    /* ===== THEMED BACK BUTTON ===== */
+.back-btn {
+  background: rgba(255,255,255,0.45);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255,255,255,0.7);
+  color: #13293D;
+  padding: 0.7rem 1.6rem;
+  border-radius: 60px;
+  font-weight: 500;
+  font-size: 0.95rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 10px 20px -10px rgba(20, 60, 100, 0.25);
+  transition: all 0.25s ease;
+}
+
+.back-btn i {
+  color: #2c5779;
+  font-size: 1rem;
+}
+
+.back-btn:hover {
+  background: white;
+  border-color: #a0c6e9;
+  box-shadow: 0 15px 25px -10px rgba(28, 78, 128, 0.3);
+  transform: translateY(-3px) scale(1.02);
+}
+
+.back-btn:active {
+  transform: scale(0.98);
+}
+    /* Mobile styles */
+    @media screen and (max-width: 768px) {
+      .app { padding: 0.8rem 1.2rem; }
+      .desktop-actions { display: none; }
+      .mobile-nav {
+        display: flex;
+        position: fixed;
+        bottom: 16px;
+        left: 12px;
+        right: 12px;
+        background: rgba(30, 50, 75, 0.75);
+        backdrop-filter: blur(20px);
+        border-radius: 60px;
+        padding: 0.8rem 1.2rem;
+        justify-content: space-around;
+        z-index: 1000;
+      }
+      .mobile-nav a {
+        color: rgba(255,255,255,0.9);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 0.85rem;
+        text-decoration: none;
+      }
+      .mobile-nav a i { font-size: 1.5rem; }
+      body { padding-bottom: 85px; }
+      .cart-items, .cart-summary { padding: 1.5rem; }
+      .cart-item { flex-wrap: wrap; }
+    }
+    @media screen and (min-width: 769px) {
+      .mobile-nav { display: none !important; }
+      body { padding-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- DESKTOP HEADER (no navigation bar) -->
+    <header class="desktop-header">
+      <div class="logo-area">
+        <i class="fas fa-bolt logo-icon"></i>
+        <span class="logo-text">sk edz<span style="font-weight:300; color:#2f638f;">/cart</span></span>
+      </div>
+      <div class="desktop-actions">
+       <a href="index.html" class="action-btn"><i class="fas fa-home"></i> HOME</a>
+        <a href="buy.html" class="action-btn"><i class="fas fa-shopping-bag"></i> SHOP</a>
+        <a href="wishlist.html" class="action-btn"><i class="fas fa-heart"></i> WISHLIST</a>
+        <a href="cart.html" class="action-btn" style="background: #1e5a88; color: white;"><i class="fas fa-shopping-cart"></i> CART</a>
+        <a href="contact.html" class="action-btn"><i class="fas fa-envelope"></i> CONTACT</a>
+      </div>
+    </header>
+    
+<div class="logo-area">
+
+</div>
+    <!-- CART HERO -->
+    <section class="cart-hero">
+      <span class="badge"><i class="fas fa-shopping-cart"></i> your cart</span>
+      <h1>shopping bag</h1>
+      <p>Real items from buy.html · correct total · WhatsApp checkout</p>
+    </section>
+
+    <!-- CART CONTAINER (dynamic) -->
+    <div class="cart-container" id="cartContainer">
+      <!-- Cart items will be injected by JavaScript -->
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-note">
+      <i class="fas fa-circle-check" style="color: #2d6f9e;"></i> thank  for visiting have a great day!;
+    </div>
+  </div>
+
+  <!-- MOBILE NAVIGATION (FIXED - links now work properly) -->
+  <nav class="mobile-nav">
+    <a href="index.html"><i class="fas fa-house"></i><span>home</span></a>
+    <a href="buy.html"><i class="fas fa-shopping-bag"></i><span>shop</span></a>
+    <a href="wishlist.html"><i class="fas fa-heart"></i><span>wishlist</span></a>
+    <a href="cart.html"><i class="fas fa-shopping-cart"></i><span>cart</span></a>
+    <a href="contact.html"><i class="fas fa-envelope"></i><span>contact</span></a>
+  </nav>
+
+  <!-- CHECKOUT MODAL (WhatsApp) - same as buy page -->
+  <div class="checkout-overlay" id="checkoutModal" style="position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.3); backdrop-filter: blur(12px); z-index:2100; display: flex; align-items: center; justify-content: center; opacity:0; visibility:hidden; transition:0.25s;">
+    <div style="background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); width:90%; max-width:450px; border-radius:60px; padding:2rem;">
+      <h2 style="color:#102b40; margin-bottom:1.5rem;"><i class="fas fa-truck"></i> checkout details</h2>
+      <div id="checkoutProductInfo" style="margin-bottom:0.5rem;"></div>
+      <div style="margin-bottom:1.2rem;">
+        <label style="display:block; font-weight:500; color:#1d4e75; margin-bottom:0.3rem;">Full name</label>
+        <input type="text" id="fullName" style="width:100%; padding:0.9rem 1.2rem; background:rgba(255,255,255,0.6); border:1px solid white; border-radius:60px; font-size:1rem; outline:none;">
+      </div>
+      <div style="margin-bottom:1.2rem;">
+        <label style="display:block; font-weight:500; color:#1d4e75; margin-bottom:0.3rem;">Phone (with code)</label>
+        <input type="tel" id="phoneNumber" style="width:100%; padding:0.9rem 1.2rem; background:rgba(255,255,255,0.6); border:1px solid white; border-radius:60px; font-size:1rem; outline:none;">
+      </div>
+      <div style="margin-bottom:1.2rem;">
+        <label style="display:block; font-weight:500; color:#1d4e75; margin-bottom:0.3rem;">Address</label>
+        <input type="text" id="address" style="width:100%; padding:0.9rem 1.2rem; background:rgba(255,255,255,0.6); border:1px solid white; border-radius:60px; font-size:1rem; outline:none;">
+      </div>
+      <div style="font-size:1.4rem; font-weight:700; color:#102b40; margin:1rem 0; text-align:right;" id="checkoutTotal">Total: ₹0</div>
+      <div style="display: flex; gap:1rem; margin-top:1.5rem;">
+        <button class="modal-btn btn-add-cart" id="cancelCheckoutBtn" style="flex:1; padding:1rem; border-radius:60px; border:none; font-weight:600; background:rgba(43,98,142,0.8); color:white; cursor:pointer;">Back</button>
+        <button class="modal-btn btn-green" id="sendWhatsAppBtn" style="flex:1; padding:1rem; border-radius:60px; border:none; font-weight:600; background:#25D366; color:white; cursor:pointer;"><i class="fab fa-whatsapp"></i> WhatsApp</button>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .checkout-overlay.active { opacity: 1 !important; visibility: visible !important; }
+    .modal-btn { transition: 0.2s; }
+    .modal-btn:hover { transform: scale(1.02); filter: brightness(1.05); }
+  </style>
+
+  <script>
+    (function() {
+      // ========== CART STATE (shared with localStorage from buy.html) ==========
+      let cart = JSON.parse(localStorage.getItem('luminaCart')) || [];
+      
+      // DOM elements
+      const cartContainer = document.getElementById('cartContainer');
+      const checkoutModal = document.getElementById('checkoutModal');
+      const cancelCheckoutBtn = document.getElementById('cancelCheckoutBtn');
+      const sendWhatsAppBtn = document.getElementById('sendWhatsAppBtn');
+      const fullNameInput = document.getElementById('fullName');
+      const phoneInput = document.getElementById('phoneNumber');
+      const addressInput = document.getElementById('address');
+      const checkoutTotalSpan = document.getElementById('checkoutTotal');
+      const checkoutProductInfo = document.getElementById('checkoutProductInfo');
+
+      // Helper: update localStorage and re-render
+      function saveCartAndRender() {
+        localStorage.setItem('luminaCart', JSON.stringify(cart));
+        renderCart();
+      }
+
+      // Render cart items and summary
+      function renderCart() {
+        if (!cart.length) {
+          cartContainer.innerHTML = `
+            <div class="cart-items" style="flex:1;">
+              <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <h3>your cart is empty</h3>
+                <p style="color:#2f5579; margin-bottom:1rem;">Add some products from the buy page</p>
+                <a href="buy.html" class="continue-shopping" id="continueShoppingBtn"><i class="fas fa-arrow-left"></i> continue shopping</a>
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        // Calculate totals
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+        const shipping = subtotal > 2000 ? 0 : 99;
+        const total = subtotal + shipping;
+
+        // Build items HTML
+        let itemsHtml = '';
+        cart.forEach((item, index) => {
+          const qty = item.quantity || 1;
+          itemsHtml += `
+            <div class="cart-item" data-index="${index}">
+              <div class="cart-item-image">
+                ${item.image ? `<img src="${item.image}" alt="${item.title}">` : `<i class="fas fa-box-open"></i>`}
+              </div>
+              <div class="cart-item-details">
+                <div class="cart-item-title">${item.title}</div>
+                <div class="cart-item-price">₹${item.price}</div>
+                <div class="cart-item-actions">
+                  <button class="quantity-btn" data-action="decrease" data-index="${index}">−</button>
+                  <span class="item-quantity">${qty}</span>
+                  <button class="quantity-btn" data-action="increase" data-index="${index}">+</button>
+                  <button class="remove-item" data-action="remove" data-index="${index}"><i class="fas fa-trash"></i></button>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+
+        // Full cart HTML with continue shopping link
+        cartContainer.innerHTML = `
+          <div class="cart-items">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+              <h3 style="font-size:1.4rem; color:#13293D;">${cart.length} item(s)</h3>
+              <a href="buy.html" id="continueShoppingLink" style="background:rgba(255,255,255,0.4); padding:0.5rem 1.2rem; border-radius:60px; text-decoration:none; color:#1e5a88; font-weight:500; border:1px solid white;"><i class="fas fa-arrow-left"></i> continue</a>
+            </div>
+            ${itemsHtml}
+          </div>
+          <div class="cart-summary">
+            <h3 style="font-size:1.6rem; color:#13293D; margin-bottom:1.5rem;">summary</h3>
+            <div class="summary-row">
+              <span>Subtotal</span>
+              <span>₹${subtotal}</span>
+            </div>
+            <div class="summary-row">
+              <span>Shipping</span>
+              <span>${shipping === 0 ? 'free' : '₹' + shipping}</span>
+            </div>
+            <div class="summary-row summary-total">
+              <span>Total</span>
+              <span>₹${total}</span>
+            </div>
+            <button class="checkout-btn" id="checkoutBtn"><i class="fas fa-bolt"></i> proceed to checkout</button>
+            <button class="clear-cart-btn" id="clearCartBtn"><i class="fas fa-trash-alt"></i> clear cart</button>
+          </div>
+        `;
+
+        // Attach event listeners
+        attachCartEvents();
+      }
+
+      // Attach quantity/remove/checkout events
+      function attachCartEvents() {
+        // Continue shopping link
+        const continueLink = document.getElementById('continueShoppingLink');
+        if (continueLink) {
+          continueLink.addEventListener('click', (e) => {
+            // Let the default href work - no preventDefault
+            // Just ensure it navigates to buy.html
+          });
+        }
+
+        // Quantity buttons
+        document.querySelectorAll('.quantity-btn').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const index = btn.dataset.index;
+            const action = btn.dataset.action;
+            if (action === 'increase') {
+              cart[index].quantity = (cart[index].quantity || 1) + 1;
+            } else if (action === 'decrease') {
+              const newQty = (cart[index].quantity || 1) - 1;
+              if (newQty >= 1) {
+                cart[index].quantity = newQty;
+              } else {
+                // Remove if quantity becomes 0
+                cart.splice(index, 1);
+              }
+            }
+            saveCartAndRender();
+          });
+        });
+
+        // Remove item
+        document.querySelectorAll('.remove-item').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const index = btn.dataset.index;
+            cart.splice(index, 1);
+            saveCartAndRender();
+          });
+        });
+
+        // Clear cart
+        const clearBtn = document.getElementById('clearCartBtn');
+        if (clearBtn) {
+          clearBtn.addEventListener('click', () => {
+            cart = [];
+            saveCartAndRender();
+          });
+        }
+
+        // Checkout button
+        const checkoutBtn = document.getElementById('checkoutBtn');
+        if (checkoutBtn) {
+          checkoutBtn.addEventListener('click', () => {
+            openCheckoutModal();
+          });
+        }
+      }
+
+      // Open checkout modal (WhatsApp form)
+      function openCheckoutModal() {
+        if (!cart.length) return;
+        
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+        const shipping = subtotal > 2000 ? 0 : 99;
+        const total = subtotal + shipping;
+
+        checkoutProductInfo.innerHTML = `<p style="font-weight:500; margin-bottom:0.8rem;">${cart.length} item(s) · total ₹${total}</p>`;
+        checkoutTotalSpan.textContent = `Total: ₹${total}`;
+        checkoutModal.classList.add('active');
+      }
+
+      // Close checkout modal
+      cancelCheckoutBtn.addEventListener('click', () => {
+        checkoutModal.classList.remove('active');
+      });
+
+      // Handle WhatsApp send
+      sendWhatsAppBtn.addEventListener('click', () => {
+        const name = fullNameInput.value.trim();
+        const phone = phoneInput.value.trim();
+        const address = addressInput.value.trim();
+
+        if (!name || !phone || !address) {
+          alert('Please fill all details');
+          return;
+        }
+
+        if (!cart.length) return;
+
+        // Calculate totals
+        const subtotal = cart.reduce((sum, item) => sum + (item.price * (item.quantity || 1)), 0);
+        const shipping = subtotal > 2000 ? 0 : 99;
+        const total = subtotal + shipping;
+
+        // Build product details with quantities
+        let productDetails = '';
+        cart.forEach(item => {
+          productDetails += `${item.title} (x${item.quantity || 1}) - ₹${item.price * (item.quantity || 1)}%0a`;
+        });
+
+        const message = `🛍️ *New Order from Cart*%0a%0a*Name:* ${name}%0a*Phone:* ${phone}%0a*Address:* ${address}%0a%0a*Products:*%0a${productDetails}%0a*Subtotal:* ₹${subtotal}%0a*Total:* ₹${total}%0a*`;
+
+        // Use the same number as buy.html (replace with your actual shop number)
+        const whatsappNumber = "9345306572"; 
+        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
+        window.open(whatsappUrl, '_blank');
+
+        // Ask if user wants to clear cart after order
+        if (confirm('Clear your cart after placing order?')) {
+          cart = [];
+          saveCartAndRender();
+        }
+
+        checkoutModal.classList.remove('active');
+        
+        // Clear form
+        fullNameInput.value = '';
+        phoneInput.value = '';
+        addressInput.value = '';
+      });
+
+      // Click outside to close modal
+      checkoutModal.addEventListener('click', (e) => {
+        if (e.target === checkoutModal) checkoutModal.classList.remove('active');
+      });
+
+      // Initial render
+      renderCart();
+
+      // ===== FIXED: Mobile navigation now works =====
+      // REMOVED the problematic e.preventDefault() that was breaking navigation
+      // The mobile nav links will now work normally without any interference
+      
+      // (Optional) You can add active state styling without breaking navigation
+      document.querySelectorAll('.mobile-nav a').forEach(link => {
+        link.addEventListener('click', function(e) {
+          // Remove active class from all mobile nav links
+          document.querySelectorAll('.mobile-nav a').forEach(l => l.classList.remove('active'));
+          // Add active class to clicked link
+          this.classList.add('active');
+          // DO NOT use e.preventDefault() - allow default navigation
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

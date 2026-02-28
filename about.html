@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>SK EDZ · about</title>
+  <!-- Font & Icons (same as index) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="icon" href="logo.jpg" type="image/png">
+  <style>
+    /* === RESET + GLOBAL (identical to index, same theme) === */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f4f7fc;
+      background: radial-gradient(circle at 10% 30%, #e9eff7, #dbe5f0);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #1b2b40;
+      line-height: 1.4;
+      scroll-behavior: smooth;
+    }
+
+    .app {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.2rem 1.8rem;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* ===== DESKTOP HEADER (no navbar) ===== */
+    .desktop-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0 2rem 0;
+      flex-wrap: wrap;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-icon {
+      font-size: 2.2rem;
+      color: #1e3c5c;
+      filter: drop-shadow(0 6px 10px rgba(22, 78, 161, 0.15));
+      animation: softGlow 3s infinite alternate;
+    }
+
+    @keyframes softGlow {
+      0% { filter: drop-shadow(0 4px 8px rgba(0,60,130,0.2)); }
+      100% { filter: drop-shadow(0 12px 18px rgba(0,90,200,0.35)); }
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(145deg, #13293D, #1F4E79);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .desktop-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .desktop-actions .action-btn {
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(4px);
+      padding: 0.6rem 1.2rem;
+      border-radius: 60px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #13293D;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.02);
+      transition: 0.2s ease-in-out;
+      cursor: default;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .desktop-actions .action-btn i {
+      margin-right: 6px;
+      color: #2c5779;
+    }
+
+    .desktop-actions .action-btn:hover {
+      background: white;
+      border-color: #a0c6e9;
+      box-shadow: 0 8px 18px rgba(28, 78, 128, 0.12);
+      transform: scale(1.02);
+    }
+
+    /* ----- MOBILE NAVIGATION (hidden on desktop) ----- */
+    .mobile-nav {
+      display: none;
+    }
+
+    /* ===== ABOUT PAGE SPECIFIC STYLES (theme consistent) ===== */
+    .about-hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2.5rem;
+      margin: 1rem 0 3rem 0;
+    }
+
+    .about-hero-content {
+      flex: 1 1 300px;
+      animation: slideUp 0.9s cubic-bezier(0.15, 0.85, 0.3, 1.05) forwards;
+    }
+
+    @keyframes slideUp {
+      0% { opacity: 0; transform: translateY(35px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .about-hero-content .badge {
+      background: rgba(43, 108, 176, 0.18);
+      backdrop-filter: blur(3px);
+      display: inline-block;
+      padding: 0.4rem 1.1rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      color: #1e4f7a;
+      border: 1px solid rgba(255,255,255,0.5);
+      margin-bottom: 1.2rem;
+    }
+
+    .about-hero-content h1 {
+      font-size: clamp(2.4rem, 7vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      background: linear-gradient(155deg, #102b40, #264e70, #1b3b55);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1.5rem;
+    }
+
+    .about-hero-content p {
+      font-size: 1.2rem;
+      color: #2f4055;
+      max-width: 550px;
+      font-weight: 300;
+      border-left: 4px solid #3670a5;
+      padding-left: 1.3rem;
+      margin-bottom: 2rem;
+    }
+
+    .about-highlight {
+      background: rgba(255,255,255,0.3);
+      border-radius: 100px;
+      padding: 0.2rem 1rem;
+      color: #0d3f5e;
+      border: 1px solid rgba(255,255,255,0.7);
+      font-weight: 500;
+      display: inline-block;
+    }
+
+    .about-stats {
+      display: flex;
+      gap: 2rem;
+      margin-top: 1.8rem;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      background: rgba(255,255,255,0.3);
+      backdrop-filter: blur(6px);
+      border-radius: 40px;
+      padding: 0.8rem 1.5rem;
+      font-weight: 600;
+      color: #1a4b73;
+      border: 1px solid rgba(255,255,255,0.6);
+      box-shadow: 0 10px 20px -10px #1e4e77;
+    }
+
+    .stat-item i {
+      margin-right: 8px;
+      color: #245e8f;
+    }
+
+    .about-visual {
+      flex: 1 1 280px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .glass-card-about {
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 48px;
+      padding: 2rem 2.2rem;
+      box-shadow: 0 30px 50px -20px rgba(1, 48, 87, 0.3),
+                  inset 0 1px 3px rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.5);
+      width: 100%;
+      max-width: 380px;
+      animation: float 5s infinite alternate ease-in-out;
+      text-align: center;
+    }
+
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0.2deg); }
+      100% { transform: translateY(-12px) rotate(-0.2deg); }
+    }
+
+    .glass-card-about i {
+      font-size: 3rem;
+      color: #254b70;
+      margin-bottom: 0.8rem;
+    }
+
+    .glass-card-about h3 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #13293D;
+    }
+
+    .glass-card-about p {
+      color: #1f4b70;
+      font-weight: 400;
+      margin-top: 0.5rem;
+    }
+
+    /* story section */
+    .story-section {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 2rem;
+      margin: 4rem 0;
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(8px);
+      border-radius: 60px;
+      padding: 2.5rem;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 20px 30px -15px rgba(26, 67, 113, 0.2);
+    }
+
+    .story-text {
+      flex: 2 1 300px;
+    }
+
+    .story-text h2 {
+      font-size: 2.2rem;
+      font-weight: 600;
+      color: #102b40;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .story-text h2 i {
+      color: #2c6b9e;
+      font-size: 2rem;
+    }
+
+    .story-text p {
+      font-size: 1.1rem;
+      color: #264e70;
+      font-weight: 350;
+      line-height: 1.6;
+      margin-bottom: 1.2rem;
+    }
+
+    .values-grid {
+      flex: 1 1 220px;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .value-card {
+      background: rgba(255,255,255,0.5);
+      border-radius: 36px;
+      padding: 1.3rem 1.5rem;
+      border: 1px solid rgba(255,255,255,0.8);
+      backdrop-filter: blur(4px);
+      transition: 0.2s;
+    }
+
+    .value-card:hover {
+      transform: translateY(-5px);
+      background: rgba(255,255,255,0.75);
+    }
+
+    .value-card i {
+      font-size: 1.8rem;
+      color: #245e8f;
+      margin-bottom: 0.5rem;
+    }
+
+    .value-card h4 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+
+    .value-card p {
+      color: #2f5579;
+      font-size: 0.95rem;
+    }
+
+    /* team section */
+    .team-section {
+      margin: 5rem 0 3rem;
+    }
+
+    .team-section h2 {
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: #102b40;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    .team-section .subhead {
+      text-align: center;
+      color: #31658c;
+      font-size: 1.2rem;
+      margin-bottom: 3rem;
+      font-weight: 300;
+    }
+
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+    }
+
+    .team-member {
+      background: rgba(255,255,255,0.3);
+      backdrop-filter: blur(10px);
+      border-radius: 48px;
+      padding: 2rem 1.2rem 1.5rem;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.7);
+      transition: 0.25s;
+      animation: cardFade 0.7s backwards;
+    }
+
+    .team-member:nth-child(1) { animation-delay: 0.1s; }
+    .team-member:nth-child(2) { animation-delay: 0.2s; }
+    .team-member:nth-child(3) { animation-delay: 0.3s; }
+    .team-member:nth-child(4) { animation-delay: 0.4s; }
+
+    @keyframes cardFade {
+      0% { opacity: 0; transform: scale(0.9); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .team-member:hover {
+      transform: scale(1.02) translateY(-6px);
+      background: rgba(255,255,255,0.6);
+      border-color: white;
+    }
+
+    .team-member .avatar {
+      font-size: 3.5rem;
+      color: #1c5583;
+      margin-bottom: 0.8rem;
+      background: rgba(255,255,255,0.7);
+      width: 90px;
+      height: 90px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 1rem;
+      box-shadow: 0 10px 20px -8px #1b3e5e;
+    }
+
+    .team-member h3 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #102b40;
+    }
+
+    .team-member .role {
+      color: #2f6b9c;
+      font-weight: 500;
+      margin: 0.3rem 0 0.8rem;
+    }
+
+    .team-member .bio {
+      font-size: 0.95rem;
+      color: #2f5579;
+    }
+
+    .footer-note {
+      margin-top: 4rem;
+      padding: 1.8rem 0.5rem;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.6);
+      font-weight: 300;
+      color: #2e5375;
+      font-size: 0.95rem;
+    }
+
+    /* -------------------- RESPONSIVE (MOBILE) same as index -------------------- */
+    @media screen and (max-width: 768px) {
+      .app {
+        padding: 0.8rem 1.2rem;
+      }
+
+      .desktop-actions {
+        display: none;
+      }
+
+      .mobile-nav {
+        display: flex;
+        position: fixed;
+        bottom: 16px;
+        left: 12px;
+        right: 12px;
+        background: rgba(30, 50, 75, 0.75);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 60px;
+        padding: 0.8rem 1.2rem;
+        justify-content: space-around;
+        align-items: center;
+        box-shadow: 0 15px 40px rgba(0, 20, 40, 0.3), 0 0 0 1px rgba(255,255,255,0.2);
+        z-index: 1000;
+        animation: navRise 0.5s ease-out;
+      }
+
+      @keyframes navRise {
+        0% { opacity: 0; transform: translateY(30px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+
+      .mobile-nav a {
+        color: rgba(255,255,255,0.9);
+        font-size: 1.2rem;
+        padding: 0.5rem 0.9rem;
+        border-radius: 40px;
+        background: transparent;
+        transition: 0.2s;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 0.85rem;
+        font-weight: 500;
+        text-decoration: none;
+      }
+
+      .mobile-nav a i {
+        font-size: 1.5rem;
+        margin-bottom: 2px;
+      }
+
+      .mobile-nav a:hover, .mobile-nav a:active {
+        background: rgba(255,255,255,0.2);
+        color: white;
+      }
+
+      body {
+        padding-bottom: 85px;
+      }
+
+      .story-section {
+        padding: 1.8rem;
+      }
+
+      .values-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media screen and (max-width: 480px) {
+      .values-grid {
+        grid-template-columns: 1fr;
+      }
+      .mobile-nav a {
+        font-size: 0.7rem;
+      }
+      .mobile-nav a i {
+        font-size: 1.3rem;
+      }
+    }
+
+    @media screen and (min-width: 769px) {
+      .mobile-nav {
+        display: none !important;
+      }
+      body {
+        padding-bottom: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- DESKTOP HEADER (identical to index) -->
+    <header class="desktop-header">
+      <div class="logo-area">
+        <i class="fas fa-bolt logo-icon"></i>
+        <span class="logo-text">SK EDZ</span><span style="font-weight:300; color:#2f638f;">/ABOUT</span>
+      </div>
+      <div class="desktop-actions">
+        <a href="index.html" class="action-btn"><i class="fas fa-home"></i> HOME</a>
+        <a href="buy.html" class="action-btn"><i class="fas fa-shopping-bag"></i> SHOP</a>
+        <a href="wishlist.html" class="action-btn"><i class="fas fa-heart"></i> WISHLIST</a>
+        <a href="cart.html" class="action-btn"><i class="fas fa-shopping-cart"></i> CART</a>
+        <a href="contact.html" class="action-btn"><i class="fas fa-envelope"></i> CONTACT</a>
+      </div>
+    </header>
+
+    <!-- ABOUT HERO SECTION (theme match) -->
+    <section class="about-hero">
+      <div class="about-hero-content">
+        <span class="badge"><i class="fas fa-people-group"></i> about us</span>
+        <h1>Designed around your story,<br>in every frame.</h1>
+        <p>We bring your memories to life through creative editing and professional photo framing. Our passion is turning ordinary moments into beautiful, lasting works of art. From detailed photo enhancements to stylish custom frames, we focus on quality, creativity, and customer satisfaction.</p>
+        <div class="about-highlight">
+          <i class="fas fa-check-circle"></i>  treusted by 1000+ customers worldwide
+        </div>
+        
+      </div>
+     
+    </section>
+
+    <!-- STORY + VALUES (glass section) -->
+    <div class="story-section">
+      <div class="story-text">
+        <h2><i class="fas fa-feather-point"></i> about us</h2>
+        <p>We believe every memory deserves intention. Every edit, every frame, every detail — carefully crafted to elevate your moments beyond the ordinary.
+         Our work is guided by precision, creativity, and a deep respect for your story. From seamless photo enhancements to perfectly balanced framing, we focus on subtle details that make a powerful difference.</p>
+        <p>Clean. Refined. Timeless.Your memories — perfected, layer by layer..</p>
+      </div>
+      <div class="values-grid">
+        <div class="value-card">
+          <i class="fas fa-check"></i>
+          <h4>on time</h4>
+          <p>deliver on time</p>
+        </div>
+        <div class="value-card">
+          <i class="fas fa-check"></i>
+          <h4>quick support</h4>
+          <p>fast responsive and helpful</p>
+        </div>
+       
+      </div>
+    </div>
+
+    <!-- TEAM SECTION -->
+    <div class="team-section">
+      <h2>our team </h2>
+      <div class="subhead">do you like to join with us?</div>
+      <div class="team-grid">
+        <div class="team-member">
+          <div class="avatar"><i class="fas fa-user"></i></div>
+          <h3>TAP TO JOIN</h3>
+          <div class="role">click the join button and join our team and get more details</div>
+          <p><a href="team.html" class="action-btn" style="padding: 0.5rem 1rem; font-size: 0.9rem;"><i class="fas fa-user-plus"></i> JOIN US</a></p>
+        </div>
+       
+      </div>
+    </div>
+
+    <!-- FOOTER (same style) -->
+    <div class="footer-note">
+      <i class="fas fa-circle-check" style="color: #2d6f9e;"></i>  about sk edz . tanks for visiting us . we are always here to serve you with best quality and best services
+    </div>
+  </div>
+
+  <!-- MOBILE NAVIGATION (identical to index) - FIXED -->
+  <nav class="mobile-nav">
+    <a href="index.html"><i class="fas fa-house"></i><span>home</span></a>
+    <a href="buy.html"><i class="fas fa-shopping-bag"></i><span>shop</span></a>
+    <a href="wishlist.html"><i class="fas fa-heart"></i><span>wishlist</span></a>
+    <a href="cart.html"><i class="fas fa-shopping-cart"></i><span>cart</span></a>
+    <a href="contact.html"><i class="fas fa-envelope"></i><span>contact</span></a>
+  </nav>
+
+  <!-- micro touch for mobile nav - FIXED (removed e.preventDefault) -->
+  <script>
+    (function() {
+      const navItems = document.querySelectorAll('.mobile-nav a');
+      navItems.forEach(link => {
+        link.addEventListener('click', function(e) {
+          // REMOVED e.preventDefault() - now navigation works!
+          
+          // Just visual feedback
+          navItems.forEach(i => i.style.background = '');
+          this.style.background = 'rgba(255,255,255,0.25)';
+          
+          // Let the browser navigate naturally
+          // The visual feedback will show then page will change
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>SK EDZ · wishlist</title>
+  <link rel="icon" href="logo.jpg" type="image/png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    /* === RESET + GLOBAL === */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f4f7fc;
+      background: radial-gradient(circle at 10% 30%, #e9eff7, #dbe5f0);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #1b2b40;
+      line-height: 1.4;
+    }
+    .app {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.2rem 1.8rem;
+      width: 100%;
+      flex: 1;
+    }
+    /* ===== DESKTOP HEADER ===== */
+    .desktop-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0 2rem 0;
+      flex-wrap: wrap;
+    }
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .logo-icon {
+      font-size: 2.2rem;
+      color: #1e3c5c;
+      filter: drop-shadow(0 6px 10px rgba(22, 78, 161, 0.15));
+      animation: softGlow 3s infinite alternate;
+    }
+    @keyframes softGlow {
+      0% { filter: drop-shadow(0 4px 8px rgba(0,60,130,0.2)); }
+      100% { filter: drop-shadow(0 12px 18px rgba(0,90,200,0.35)); }
+    }
+    .logo-text {
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(145deg, #13293D, #1F4E79);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .desktop-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .desktop-actions .action-btn {
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(4px);
+      padding: 0.6rem 1.2rem;
+      border-radius: 60px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #13293D;
+      border: 1px solid rgba(255,255,255,0.7);
+      transition: 0.2s;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .desktop-actions .action-btn i { margin-right: 6px; color: #2c5779; }
+    .desktop-actions .action-btn:hover {
+      background: white;
+      border-color: #a0c6e9;
+      transform: scale(1.02);
+    }
+    .wishlist-header-icon {
+      position: relative;
+      font-size: 1.6rem;
+      color: #c13b6f;
+      background: rgba(255,255,255,0.5);
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,0.7);
+      transition: 0.2s;
+      cursor: pointer;
+    }
+    .wishlist-header-icon:hover { background: white; transform: scale(1.05); }
+    .wishlist-count-badge {
+      position: absolute;
+      top: -5px; right: -5px;
+      background: #1e5a88;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid white;
+    }
+    .mobile-nav { display: none; }
+    
+    /* ===== WISHLIST PAGE SPECIFIC ===== */
+    .wishlist-hero { margin: 1rem 0 2rem 0; }
+    .wishlist-hero .badge {
+      background: rgba(43, 108, 176, 0.18);
+      backdrop-filter: blur(3px);
+      display: inline-block;
+      padding: 0.4rem 1.1rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1e4f7a;
+      border: 1px solid rgba(255,255,255,0.5);
+      margin-bottom: 1.2rem;
+    }
+    .wishlist-hero h1 {
+      font-size: clamp(2.4rem, 7vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      background: linear-gradient(155deg, #102b40, #264e70, #1b3b55);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      margin-bottom: 0.5rem;
+    }
+    .wishlist-hero p {
+      font-size: 1.1rem;
+      color: #2f4055;
+      font-weight: 300;
+    }
+    
+    .wishlist-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 1.5rem;
+      margin: 3rem 0;
+      justify-content: center;
+    }
+    
+    .wishlist-card {
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(12px);
+      border-radius: 24px;
+      padding: 1rem;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 20px 30px -15px rgba(26, 67, 113, 0.25);
+      transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+      display: flex;
+      flex-direction: column;
+    }
+    .wishlist-card:hover {
+      transform: translateY(-6px);
+      background: rgba(255, 255, 255, 0.5);
+      border-color: white;
+      box-shadow: 0 28px 40px -12px #1b4c79;
+    }
+    
+    .wishlist-image {
+      width: 100%;
+      aspect-ratio: 1 / 1;
+      background: #d9e3ed;
+      border-radius: 16px; 
+      margin-bottom: 0.8rem; 
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #2c6b9e;
+      font-size: 3rem;
+    }
+    .wishlist-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .wishlist-title {
+      font-size: 1.1rem; 
+      font-weight: 600;
+      color: #13293D;
+      margin-bottom: 0.25rem;
+    }
+    .wishlist-price {
+      font-size: 1.2rem; 
+      font-weight: 700;
+      color: #1e5a88;
+      margin-top: 0.25rem;
+      margin-bottom: 1rem;
+    }
+    .wishlist-actions {
+      display: flex;
+      gap: 0.8rem;
+      margin-top: auto;
+      flex-wrap: wrap;
+    }
+    .wishlist-btn {
+      flex: 1;
+      padding: 0.6rem 0.8rem; 
+      border-radius: 40px;
+      border: none;
+      font-weight: 600;
+      font-size: 0.85rem; 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.6);
+      color: #13293D;
+    }
+    .wishlist-btn i { color: #2c5779; }
+    .wishlist-btn:hover { background: white; transform: scale(1.02); }
+    .wishlist-btn-primary { background: rgba(43, 98, 142, 0.85); color: white; }
+    .wishlist-btn-primary i { color: white; }
+    .wishlist-btn-primary:hover { background: #1e5a88; }
+    .wishlist-btn-remove { background: rgba(255,200,200,0.5); color: #b0003a; }
+    .wishlist-btn-remove i { color: #b0003a; }
+    .wishlist-btn-remove:hover { background: #ffd0d0; }
+    
+    .empty-wishlist {
+      text-align: center;
+      padding: 4rem 1rem;
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(8px);
+      border-radius: 60px;
+      border: 1px solid rgba(255,255,255,0.7);
+    }
+    .empty-wishlist i { font-size: 5rem; color: #c13b6f; margin-bottom: 1rem; opacity: 0.6; }
+    .empty-wishlist h3 { font-size: 2rem; font-weight: 600; color: #102b40; margin-bottom: 0.5rem; }
+    .empty-wishlist p { color: #2f5579; margin-bottom: 2rem; }
+    .continue-shopping {
+      display: inline-block;
+      background: rgba(255,255,255,0.5);
+      padding: 0.8rem 2rem;
+      border-radius: 60px;
+      text-decoration: none;
+      color: #1e5a88;
+      font-weight: 500;
+      border: 1px solid white;
+      transition: 0.15s;
+    }
+    .continue-shopping:hover { background: white; }
+    
+    .footer-note {
+      margin-top: 4rem; padding: 1.8rem 0.5rem;
+      text-align: center; border-top: 1px solid rgba(255,255,255,0.6);
+      font-weight: 300; color: #2e5375;
+    }
+    
+    @media screen and (max-width: 768px) {
+      .app { padding: 0.8rem 1.2rem; }
+      .desktop-actions { display: none; }
+      .wishlist-grid { grid-template-columns: repeat(2, 1fr); gap: 0.8rem; margin: 1.5rem 0 2rem; }
+      .wishlist-card { padding: 0.7rem; border-radius: 16px; }
+      .wishlist-title { font-size: 0.9rem; }
+      .wishlist-price { font-size: 1rem; margin-bottom: 0.6rem; }
+      .wishlist-actions { gap: 0.4rem; }
+      .wishlist-btn { padding: 0.4rem; font-size: 0.75rem; }
+
+      .mobile-nav {
+        display: flex;
+        position: fixed;
+        bottom: 16px; left: 12px; right: 12px;
+        background: rgba(30, 50, 75, 0.75);
+        backdrop-filter: blur(20px);
+        border-radius: 60px;
+        padding: 0.8rem 1.2rem;
+        justify-content: space-around;
+        z-index: 1000;
+      }
+      .mobile-nav a {
+        color: rgba(255,255,255,0.9);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 0.85rem;
+        text-decoration: none;
+      }
+      .mobile-nav a i { font-size: 1.5rem; }
+      body { padding-bottom: 85px; }
+    }
+    @media screen and (min-width: 769px) {
+      .mobile-nav { display: none !important; }
+      body { padding-bottom: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="desktop-header">
+      <div class="logo-area">
+        <i class="fas fa-bolt logo-icon"></i>
+        <span class="logo-text">SK EDZ<span style="font-weight:300; color:#2f638f;">/wishlist</span></span>
+      </div>
+      <div style="display: flex; gap: 1rem; align-items: center;">
+        <div class="wishlist-header-icon" id="wishlist-header-icon" onclick="window.location.href='wishlist.html'">
+          <i class="fas fa-heart"></i>
+          <span class="wishlist-count-badge" id="wishlist-count-badge">0</span>
+        </div>
+        <div class="desktop-actions">
+          <a href="index.html" class="action-btn"><i class="fas fa-home"></i> HOME</a>
+          <a href="buy.html" class="action-btn"><i class="fas fa-shopping-bag"></i> SHOP</a>
+          <a href="wishlist.html" class="action-btn" style="background: #1e5a88; color: white;"><i class="fas fa-heart"></i> WISHLIST</a>
+          <a href="cart.html" class="action-btn"><i class="fas fa-shopping-cart"></i> CART</a>
+          <a href="contact.html" class="action-btn"><i class="fas fa-envelope"></i> CONTACT</a>
+        </div>
+      </div>
+    </header>
+
+    <section class="wishlist-hero">
+      <span class="badge"><i class="fas fa-heart" style="color: #c13b6f;"></i> your wishlist</span>
+      <h1>saved for later</h1>
+      <p>Items you loved · move to cart or remove</p>
+    </section>
+
+    <div id="wishlistContainer"></div>
+
+    <div class="footer-note">
+      <i class="fas fa-circle-check" style="color: #2d6f9e;"></i> wishlist.html · same glass theme
+    </div>
+  </div>
+
+  <nav class="mobile-nav">
+    <a href="index.html"><i class="fas fa-house"></i><span>home</span></a>
+    <a href="buy.html"><i class="fas fa-shopping-bag"></i><span>shop</span></a>
+    <a href="wishlist.html"><i class="fas fa-heart"></i><span>wishlist</span></a>
+    <a href="cart.html"><i class="fas fa-shopping-cart"></i><span>cart</span></a>
+    <a href="contact.html"><i class="fas fa-envelope"></i><span>contact</span></a>
+  </nav>
+
+  <script>
+    (function() {
+      const container = document.getElementById('wishlistContainer');
+      const wishlistBadge = document.getElementById('wishlist-count-badge');
+      let wishlist = [];
+      
+      function loadWishlist() {
+        try {
+          const saved = localStorage.getItem('skedzWishlist');
+          wishlist = saved ? JSON.parse(saved) : [];
+          if (!Array.isArray(wishlist)) wishlist = [];
+        } catch (e) {
+          wishlist = [];
+        }
+      }
+      
+      function saveWishlist() {
+        localStorage.setItem('skedzWishlist', JSON.stringify(wishlist));
+        updateBadge();
+      }
+      
+      function updateBadge() {
+        wishlistBadge.textContent = wishlist.length;
+      }
+      
+      window.removeFromWishlist = function(id) {
+        loadWishlist();
+        wishlist = wishlist.filter(item => item.id !== id);
+        saveWishlist();
+        renderWishlist();
+      };
+      
+      window.addToCartFromWishlist = function(id) {
+        loadWishlist();
+        const product = wishlist.find(item => item.id === id);
+        if (!product) return;
+        
+        let cart = JSON.parse(localStorage.getItem('skedzCart')) || [];
+        const exists = cart.some(item => item.id === id);
+        
+        if (!exists) {
+          cart.push({ id: product.id, title: product.title, price: product.price, image: product.image });
+          localStorage.setItem('skedzCart', JSON.stringify(cart));
+          alert('✅ Added to cart');
+        } else {
+          alert('🛒 Already in cart');
+        }
+      };
+      
+      function renderWishlist() {
+        loadWishlist();
+        
+        if (!wishlist || wishlist.length === 0) {
+          container.innerHTML = `
+            <div class="empty-wishlist">
+              <i class="fas fa-heart-broken"></i>
+              <h3>your wishlist is empty</h3>
+              <p>Browse products and tap the heart to save them here</p>
+              <a href="buy.html" class="continue-shopping"><i class="fas fa-arrow-left"></i> discover products</a>
+            </div>
+          `;
+          return;
+        }
+        
+        let gridHtml = '<div class="wishlist-grid">';
+        
+        wishlist.forEach(item => {
+          const imgHtml = item.image 
+            ? `<img src="${item.image}" alt="${item.title || 'Product'}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-box-open\\' style=\\'font-size: 3rem; color: #2c6b9e;\\'></i>'">`
+            : `<i class="fas fa-box-open" style="font-size: 3rem; color: #2c6b9e;"></i>`;
+          
+          gridHtml += `
+            <div class="wishlist-card">
+              <div class="wishlist-image">
+                ${imgHtml}
+              </div>
+              <h3 class="wishlist-title">${item.title || 'Product'}</h3>
+              <div class="wishlist-price">₹${item.price || 0}</div>
+              <div class="wishlist-actions">
+                <button class="wishlist-btn wishlist-btn-primary" onclick="addToCartFromWishlist('${item.id}')"><i class="fas fa-shopping-cart"></i> Move</button>
+                <button class="wishlist-btn wishlist-btn-remove" onclick="removeFromWishlist('${item.id}')"><i class="fas fa-trash"></i></button>
+              </div>
+            </div>
+          `;
+        });
+        
+        gridHtml += '</div>';
+        container.innerHTML = gridHtml;
+      }
+      
+      renderWishlist();
+      updateBadge();
+      
+      document.addEventListener('visibilitychange', function() {
+        if (!document.hidden) {
+          renderWishlist();
+          updateBadge();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

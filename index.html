@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>SK EDZ · home</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="icon" href="logo.jpg" type="image/png">
+  <style>
+    /* === RESET + GLOBAL (unified with all pages) === */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f4f7fc;
+      background: radial-gradient(circle at 10% 30%, #e9eff7, #dbe5f0);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #1b2b40;
+      line-height: 1.4;
+      scroll-behavior: smooth;
+    }
+    .app {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.2rem 1.8rem;
+      width: 100%;
+      flex: 1;
+    }
+    /* ===== DESKTOP HEADER (no navbar) ===== */
+    .desktop-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0 2rem 0;
+      flex-wrap: wrap;
+    }
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    .logo-icon {
+      font-size: 2.2rem;
+      color: #1e3c5c;
+      filter: drop-shadow(0 6px 10px rgba(22, 78, 161, 0.15));
+      animation: softGlow 3s infinite alternate;
+    }
+    @keyframes softGlow {
+      0% { filter: drop-shadow(0 4px 8px rgba(0,60,130,0.2)); }
+      100% { filter: drop-shadow(0 12px 18px rgba(0,90,200,0.35)); }
+    }
+    .logo-text {
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(145deg, #13293D, #1F4E79);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+    }
+    .desktop-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .desktop-actions .action-btn {
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(4px);
+      padding: 0.6rem 1.2rem;
+      border-radius: 60px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #13293D;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 5px 12px rgba(0,0,0,0.02);
+      transition: 0.2s ease-in-out;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+    .desktop-actions .action-btn i { margin-right: 6px; color: #2c5779; }
+    .desktop-actions .action-btn:hover {
+      background: white;
+      border-color: #a0c6e9;
+      box-shadow: 0 8px 18px rgba(28, 78, 128, 0.12);
+      transform: scale(1.02);
+    }
+    /* ----- MOBILE NAVIGATION (hidden on desktop) ----- */
+    .mobile-nav { display: none; }
+    /* ===== HERO SECTION ===== */
+    .hero {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 2.5rem;
+      margin: 1rem 0 4rem 0;
+    }
+    .hero-content {
+      flex: 1 1 300px;
+      animation: slideUp 0.9s cubic-bezier(0.15, 0.85, 0.3, 1.05) forwards;
+    }
+    @keyframes slideUp {
+      0% { opacity: 0; transform: translateY(35px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .hero-content .badge {
+      background: rgba(43, 108, 176, 0.18);
+      backdrop-filter: blur(3px);
+      display: inline-block;
+      padding: 0.4rem 1.1rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.4px;
+      color: #1e4f7a;
+      border: 1px solid rgba(255,255,255,0.5);
+      margin-bottom: 1.2rem;
+    }
+    .hero-content h1 {
+      font-size: clamp(2.4rem, 7vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      background: linear-gradient(155deg, #102b40, #264e70, #1b3b55);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: transparent;
+      margin-bottom: 1rem;
+    }
+    .hero-content p {
+      font-size: 1.2rem;
+      color: #2f4055;
+      max-width: 550px;
+      font-weight: 300;
+      border-left: 4px solid #3670a5;
+      padding-left: 1.3rem;
+      margin-bottom: 2rem;
+    }
+    .hero-visual {
+      flex: 1 1 280px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.45);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-radius: 48px;
+      padding: 2rem 2.2rem;
+      box-shadow: 0 30px 50px -20px rgba(1, 48, 87, 0.3),
+                  inset 0 1px 3px rgba(255,255,255,0.7);
+      border: 1px solid rgba(255,255,255,0.5);
+      width: 100%;
+      max-width: 380px;
+      animation: float 5s infinite alternate ease-in-out;
+      text-align: center;
+    }
+    @keyframes float {
+      0% { transform: translateY(0) rotate(0.2deg); }
+      100% { transform: translateY(-12px) rotate(-0.2deg); }
+    }
+    .glass-card i {
+      font-size: 3rem;
+      color: #254b70;
+      margin-bottom: 0.8rem;
+    }
+    .glass-card h3 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #13293D;
+    }
+    .glass-card p {
+      color: #1f4b70;
+      font-weight: 400;
+      margin-top: 0.5rem;
+    }
+    /* ===== FEATURE GRID (like about page) ===== */
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+      margin: 4rem 0 3rem;
+    }
+    .feature-item {
+      background: rgba(255,255,255,0.3);
+      backdrop-filter: blur(8px);
+      border-radius: 36px;
+      padding: 2rem 1.5rem;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 20px 30px -15px rgba(26, 67, 113, 0.2);
+      transition: all 0.25s;
+      text-align: center;
+      animation: cardFade 0.7s backwards;
+    }
+    .feature-item:nth-child(1) { animation-delay: 0.1s; }
+    .feature-item:nth-child(2) { animation-delay: 0.2s; }
+    .feature-item:nth-child(3) { animation-delay: 0.3s; }
+    .feature-item:nth-child(4) { animation-delay: 0.4s; }
+    @keyframes cardFade {
+      0% { opacity: 0; transform: scale(0.92); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+    .feature-item:hover {
+      transform: scale(1.02) translateY(-6px);
+      background: rgba(255,255,255,0.6);
+      border-color: white;
+      box-shadow: 0 28px 40px -12px #1b4c79;
+    }
+    .feature-item i {
+      font-size: 2.5rem;
+      color: #1d5983;
+      margin-bottom: 1rem;
+      background: rgba(255,255,255,0.6);
+      padding: 0.8rem;
+      border-radius: 30px;
+      box-shadow: inset 0 2px 8px white, 0 10px 15px -10px #113755;
+    }
+    .feature-item h3 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 0.4rem;
+      color: #152f42;
+    }
+    .feature-item p {
+      color: #2f4b69;
+      font-weight: 400;
+    }
+    /* ===== STATS SECTION ===== */
+    .stats-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-around;
+      gap: 2rem;
+      margin: 3rem 0;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(6px);
+      border-radius: 80px;
+      padding: 2.5rem 1.5rem;
+      border: 1px solid rgba(255,255,255,0.6);
+    }
+    .stat-item {
+      text-align: center;
+    }
+    .stat-number {
+      font-size: 2.8rem;
+      font-weight: 700;
+      color: #1e5a88;
+      line-height: 1.2;
+    }
+    .stat-label {
+      font-size: 1rem;
+      color: #2f5579;
+      font-weight: 500;
+    }
+    /* ===== CTA SECTION ===== */
+    .cta-section {
+      background: rgba(255,255,255,0.25);
+      backdrop-filter: blur(8px);
+      border-radius: 60px;
+      padding: 3rem 2.5rem;
+      margin: 3rem 0;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.7);
+    }
+    .cta-section h2 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: #102b40;
+      margin-bottom: 1rem;
+    }
+    .cta-section p {
+      font-size: 1.2rem;
+      color: #2f5579;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+    }
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .cta-btn {
+      background: rgba(43, 98, 142, 0.85);
+      color: white;
+      border: none;
+      padding: 1rem 2.5rem;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1.1rem;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid rgba(255,255,255,0.4);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cta-btn:hover {
+      background: #1e5a88;
+      transform: scale(1.02);
+    }
+    .cta-btn-outline {
+      background: rgba(255,255,255,0.5);
+      color: #13293D;
+      border: 1px solid white;
+    }
+    .cta-btn-outline:hover {
+      background: white;
+    }
+    /* ===== FOOTER ===== */
+    .footer-note {
+      margin-top: 4rem;
+      padding: 1.8rem 0.5rem;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.6);
+      font-weight: 300;
+      color: #2e5375;
+      font-size: 0.95rem;
+    }
+    /* ===== THEMED BACK BUTTON ===== */
+    .back-btn {
+      background: rgba(255,255,255,0.45);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.7);
+      color: #13293D;
+      padding: 0.7rem 1.6rem;
+      border-radius: 60px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 10px 20px -10px rgba(20, 60, 100, 0.25);
+      transition: all 0.25s ease;
+    }
+
+    .back-btn i {
+      color: #2c5779;
+      font-size: 1rem;
+    }
+
+    .back-btn:hover {
+      background: white;
+      border-color: #a0c6e9;
+      box-shadow: 0 15px 25px -10px rgba(28, 78, 128, 0.3);
+      transform: translateY(-3px) scale(1.02);
+    }
+
+    .back-btn:active {
+      transform: scale(0.98);
+    }
+    
+    /* -------------------- RESPONSIVE (MOBILE) exactly matching wishlist.html -------------------- */
+    @media screen and (max-width: 768px) {
+      .app { padding: 0.8rem 1.2rem; }
+      .desktop-actions { display: none; }
+      
+      .mobile-nav {
+        display: flex;
+        position: fixed;
+        bottom: 16px;
+        left: 12px;
+        right: 12px;
+        background: rgba(30, 50, 75, 0.75);
+        backdrop-filter: blur(20px);
+        border-radius: 60px;
+        padding: 0.8rem 1.2rem;
+        justify-content: space-around;
+        z-index: 1000;
+      }
+      .mobile-nav a {
+        color: rgba(255,255,255,0.9);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 0.85rem;
+        text-decoration: none;
+      }
+      .mobile-nav a i { font-size: 1.5rem; }
+      body { padding-bottom: 85px; }
+      
+      .stats-row { border-radius: 40px; padding: 1.8rem; }
+      .stat-number { font-size: 2rem; }
+    }
+    @media screen and (min-width: 769px) {
+      .mobile-nav { display: none !important; }
+      body { padding-bottom: 0; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="app">
+    <header class="desktop-header">
+      <div class="logo-area">
+        <i class="fas fa-bolt logo-icon"></i>
+        <span class="logo-text">SK EDZ<span style="font-weight:300; color:#2f638f;">/home</span></span>
+        
+      </div>
+      <div class="logo-area">
+ <div class="wishlist-header-icon" id="wishlist-header-icon" onclick="window.location.href='wishlist.html'">
+          <i class="fas fa-heart"></i>
+          <span class="wishlist-count-badge" id="wishlist-count-badge">0</span>
+        </div>
+</div>
+      <div class="desktop-actions">
+        <a href="index.html" class="action-btn" style="background: #1e5a88; color: white;"><i class="fas fa-home"></i> HOME</a>
+        <a href="buy.html" class="action-btn"><i class="fas fa-shopping-bag"></i> SHOP</a>
+        <a href="wishlist.html" class="action-btn"><i class="fas fa-heart"></i> WISHLIST</a>
+        <a href="cart.html" class="action-btn"><i class="fas fa-shopping-cart"></i> CART</a>
+        <a href="contact.html" class="action-btn"><i class="fas fa-envelope"></i> CONTACT</a>
+        
+      </div>
+    </header>
+<div class="logo-area">
+  
+</div>
+    <section class="hero">
+      <div class="hero-content">
+        <span class="badge"><i class="fas fa-crown"></i> welcome to sk edz</span>
+        <h1>editing framing,<br>and more .</h1>
+        <p>We create digital spaces that breathe — simple, clean, and content-focused. Affordable Instagram reel editing and custom photo framing in all sizes.</p>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <span class="desktop-actions" style="display: flex; gap: 0.5rem; padding: 0;">
+            <a href="buy.html" class="action-btn" style="background: rgba(43, 98, 142, 0.8); color: white;"><i class="fas fa-arrow-right"></i> Explore</a>
+          </span>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="glass-card">
+          <i class="fas fa-wand-magic-sparkles"></i>
+          <h3>SOON</h3>
+          <p>we will launch our new website and app soon!</p>
+          <hr style="border: 0.5px solid rgba(255,255,255,0.4); margin: 1rem 0;">
+          <div style="display: flex; justify-content: center; gap: 1.8rem;">
+            <i class="fas fa-desktop" style="font-size: 1.8rem;"></i>
+            <i class="fas fa-mobile-alt" style="font-size: 1.8rem;"></i>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="feature-grid">
+      <div class="feature-item">
+        <i class="fas fa-cut"></i>
+        <h3>REEL EDITING</h3>
+        <p>affordable Instagram reel editing.</p>
+      </div>
+      <div class="feature-item">
+        <i class="fas fa-image"></i>
+        <h3>FRAMING</h3>
+        <p>custom photo framing in all sizes.</p>
+      </div>
+      <div class="feature-item">
+        <i class="fas fa-desktop"></i>
+        <h3>CUSTOM WEBSITE</h3>
+        <p>clean and modern website .</p>
+      </div>
+      <div class="feature-item">
+        <i class="fas fa-shop"></i>
+        <h3>STAR YOUR SHOP</h3>
+        <p>start your first shop with us.</p>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-item">
+        <i class="fas fa-bolt" style="color: #1e4f7a; font-size: 2.5rem;"></i>
+        <div class="stat-label"><br>fast response</div>
+      </div>
+      <div class="stat-item">
+        <i class="fas fa-globe-americas" style="color: #1e4f7a; font-size: 2.5rem;"></i>
+        <div class="stat-label"> <br>made in india</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number"></div>
+        <i class="fas fa-lock" style="color: #1e4f7a; font-size: 2.5rem;"></i>
+        <div class="stat-label"><br>safe and secure</div>
+      </div>
+      <div class="stat-item">
+        <i class="fas fa-calendar-alt" style="color: #1e4f7a; font-size: 2.5rem;"></i>
+        <div class="stat-label"><br>we support you in 365 days</div>
+      </div>
+    </div>
+
+    <div class="cta-section">
+      <h2>explore our universe</h2>
+      <p>to know more about us, visit our pages!</p>
+      <div class="cta-buttons">
+        <a href="buy.html" class="cta-btn"><i class="fas fa-tag"></i> Buy</a>
+        <a href="about.html" class="cta-btn cta-btn-outline"><i class="fas fa-circle-info"></i> About</a>
+        <a href="contact.html" class="cta-btn cta-btn-outline"><i class="fas fa-envelope"></i> Contact</a>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      <i class="fas fa-circle-check" style="color: #2d6f9e;"></i>  thanks for visiting!  <i class="fas fa-heart" style="color: #e25555;"></i>  made with love by sk edz
+    </div>
+  </div>
+
+  <nav class="mobile-nav">
+    <a href="index.html"><i class="fas fa-house"></i><span>home</span></a>
+    <a href="buy.html"><i class="fas fa-shopping-bag"></i><span>shop</span></a>
+    <a href="wishlist.html"><i class="fas fa-heart"></i><span>wishlist</span></a>
+    <a href="cart.html"><i class="fas fa-shopping-cart"></i><span>cart</span></a>
+    <a href="contact.html"><i class="fas fa-envelope"></i><span>contact</span></a>
+  </nav>
+
+</body>
+</html>

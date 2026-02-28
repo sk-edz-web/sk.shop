@@ -1,0 +1,703 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+  <title>SK EDZ · team & plans</title>
+  <!-- Font & Icons -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="icon" href="logo.jpg" type="image/png">
+  <style>
+    /* === RESET + GLOBAL (same theme) === */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #f4f7fc;
+      background: radial-gradient(circle at 10% 30%, #e9eff7, #dbe5f0);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #1b2b40;
+      line-height: 1.4;
+    }
+
+    .app {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 1.2rem 1.8rem;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* ===== DESKTOP HEADER ===== */
+    .desktop-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1rem 0 2rem 0;
+      flex-wrap: wrap;
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-icon {
+      font-size: 2.2rem;
+      color: #1e3c5c;
+      filter: drop-shadow(0 6px 10px rgba(22, 78, 161, 0.15));
+      animation: softGlow 3s infinite alternate;
+    }
+
+    @keyframes softGlow {
+      0% { filter: drop-shadow(0 4px 8px rgba(0,60,130,0.2)); }
+      100% { filter: drop-shadow(0 12px 18px rgba(0,90,200,0.35)); }
+    }
+
+    .logo-text {
+      font-weight: 700;
+      font-size: 1.8rem;
+      letter-spacing: -0.02em;
+      background: linear-gradient(145deg, #13293D, #1F4E79);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .desktop-actions {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .desktop-actions .action-btn {
+      background: rgba(255,255,255,0.5);
+      backdrop-filter: blur(4px);
+      padding: 0.6rem 1.2rem;
+      border-radius: 60px;
+      font-weight: 500;
+      font-size: 0.95rem;
+      color: #13293D;
+      border: 1px solid rgba(255,255,255,0.7);
+      transition: 0.2s;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .desktop-actions .action-btn i {
+      margin-right: 6px;
+      color: #2c5779;
+    }
+
+    .desktop-actions .action-btn:hover {
+      background: white;
+      border-color: #a0c6e9;
+      transform: scale(1.02);
+    }
+
+    /* Wishlist heart in header */
+    .wishlist-header-icon {
+      position: relative;
+      font-size: 1.6rem;
+      color: #c13b6f;
+      background: rgba(255,255,255,0.5);
+      width: 48px; height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(255,255,255,0.7);
+      transition: 0.2s;
+      cursor: pointer;
+    }
+
+    .wishlist-header-icon:hover {
+      background: white;
+      transform: scale(1.05);
+    }
+
+    .wishlist-count-badge {
+      position: absolute;
+      top: -5px; right: -5px;
+      background: #1e5a88;
+      color: white;
+      font-size: 0.75rem;
+      font-weight: 600;
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 2px solid white;
+    }
+
+    /* ----- MOBILE NAVIGATION ----- */
+    .mobile-nav {
+      display: none;
+    }
+
+    /* ===== TEAM HERO SECTION ===== */
+    .team-hero {
+      margin: 1rem 0 3rem 0;
+      animation: slideUp 0.8s ease-out;
+    }
+
+    @keyframes slideUp {
+      0% { opacity: 0; transform: translateY(30px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .team-hero .badge {
+      background: rgba(43, 108, 176, 0.18);
+      backdrop-filter: blur(3px);
+      display: inline-block;
+      padding: 0.4rem 1.1rem;
+      border-radius: 40px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1e4f7a;
+      border: 1px solid rgba(255,255,255,0.5);
+      margin-bottom: 1.2rem;
+    }
+
+    .team-hero h1 {
+      font-size: clamp(2.4rem, 7vw, 3.8rem);
+      font-weight: 700;
+      line-height: 1.1;
+      background: linear-gradient(155deg, #102b40, #264e70, #1b3b55);
+      background-clip: text;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.5rem;
+    }
+
+    .team-hero p {
+      font-size: 1.2rem;
+      color: #2f4055;
+      max-width: 600px;
+      font-weight: 300;
+    }
+
+    /* ===== TEAM GRID ===== */
+    .team-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+
+    .team-card {
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(12px);
+      border-radius: 36px;
+      padding: 2rem 1.5rem;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 20px 30px -15px rgba(26, 67, 113, 0.25);
+      transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+      text-align: center;
+      animation: cardAppear 0.6s backwards;
+    }
+
+    .team-card:nth-child(1) { animation-delay: 0.1s; }
+    .team-card:nth-child(2) { animation-delay: 0.2s; }
+    .team-card:nth-child(3) { animation-delay: 0.3s; }
+    .team-card:nth-child(4) { animation-delay: 0.4s; }
+
+    @keyframes cardAppear {
+      0% { opacity: 0; transform: translateY(20px) scale(0.97); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .team-card:hover {
+      transform: translateY(-6px);
+      background: rgba(255, 255, 255, 0.5);
+      border-color: white;
+      box-shadow: 0 28px 40px -12px #1b4c79;
+    }
+
+    .team-avatar {
+      width: 120px;
+      height: 120px;
+      margin: 0 auto 1.2rem;
+      background: rgba(255,255,255,0.7);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 3.5rem;
+      color: #1e5a88;
+      border: 3px solid white;
+      box-shadow: 0 10px 20px -8px #1b3e5e;
+    }
+
+    .team-card h3 {
+      font-size: 1.6rem;
+      font-weight: 600;
+      color: #13293D;
+      margin-bottom: 0.3rem;
+    }
+
+    .team-role {
+      color: #2f6b9c;
+      font-weight: 500;
+      font-size: 1rem;
+      margin-bottom: 0.8rem;
+    }
+
+    .team-bio {
+      color: #2f5579;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    /* ===== SUBSCRIPTION PLANS SECTION ===== */
+    .plans-section {
+      margin: 4rem 0 3rem;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-header h2 {
+      font-size: 2.4rem;
+      font-weight: 600;
+      color: #102b40;
+      margin-bottom: 0.5rem;
+    }
+
+    .section-header p {
+      color: #31658c;
+      font-size: 1.2rem;
+      font-weight: 300;
+    }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .plan-card {
+      background: rgba(255, 255, 255, 0.3);
+      backdrop-filter: blur(12px);
+      border-radius: 48px;
+      padding: 2.5rem 1.8rem;
+      border: 1px solid rgba(255,255,255,0.7);
+      box-shadow: 0 20px 30px -15px rgba(26, 67, 113, 0.25);
+      transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-8px);
+      background: rgba(255, 255, 255, 0.5);
+      border-color: white;
+      box-shadow: 0 30px 45px -15px #1b4c79;
+    }
+
+    .plan-popular {
+      background: linear-gradient(135deg, rgba(255,255,255,0.4), rgba(255,255,255,0.2));
+      border: 2px solid rgba(255,215,0,0.3);
+    }
+
+    .popular-tag {
+      position: absolute;
+      top: 15px;
+      right: -30px;
+      background: #ffd700;
+      color: #1b2b40;
+      padding: 0.3rem 2.5rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transform: rotate(45deg);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .plan-icon {
+      font-size: 2.5rem;
+      color: #1e5a88;
+      margin-bottom: 1rem;
+    }
+
+    .plan-card h3 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #13293D;
+      margin-bottom: 0.5rem;
+    }
+
+    .plan-price {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #1e5a88;
+      margin-bottom: 1rem;
+    }
+
+    .plan-price span {
+      font-size: 1rem;
+      font-weight: 400;
+      color: #4a6f8f;
+    }
+
+    .plan-features {
+      list-style: none;
+      margin: 1.5rem 0;
+      flex: 1;
+    }
+
+    .plan-features li {
+      padding: 0.5rem 0;
+      color: #2f5579;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .plan-features li i {
+      color: #2ecc71;
+      font-size: 1rem;
+    }
+
+    .plan-btn {
+      background: rgba(43, 98, 142, 0.85);
+      color: white;
+      border: none;
+      padding: 1rem;
+      border-radius: 60px;
+      font-weight: 600;
+      font-size: 1rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+      border: 1px solid rgba(255,255,255,0.7);
+      margin-top: auto;
+      width: 100%;
+    }
+
+    .plan-btn i {
+      color: white;
+      font-size: 1.2rem;
+    }
+
+    .plan-btn:hover {
+      background: #1e5a88;
+      transform: scale(1.02);
+    }
+
+    .plan-btn-wa {
+      background: #25D366;
+    }
+
+    .plan-btn-wa:hover {
+      background: #20bd5a;
+    }
+
+    /* Footer */
+    .footer-note {
+      margin-top: 4rem;
+      padding: 1.8rem 0.5rem;
+      text-align: center;
+      border-top: 1px solid rgba(255,255,255,0.6);
+      font-weight: 300;
+      color: #2e5375;
+    }
+
+    /* Mobile styles */
+    @media screen and (max-width: 768px) {
+      .app {
+        padding: 0.8rem 1.2rem;
+      }
+
+      .desktop-actions {
+        display: none;
+      }
+
+      .mobile-nav {
+        display: flex;
+        position: fixed;
+        bottom: 16px;
+        left: 12px;
+        right: 12px;
+        background: rgba(30, 50, 75, 0.75);
+        backdrop-filter: blur(20px);
+        border-radius: 60px;
+        padding: 0.8rem 1.2rem;
+        justify-content: space-around;
+        z-index: 1000;
+        animation: navRise 0.5s ease-out;
+      }
+
+      @keyframes navRise {
+        0% { opacity: 0; transform: translateY(30px); }
+        100% { opacity: 1; transform: translateY(0); }
+      }
+
+      .mobile-nav a {
+        color: rgba(255,255,255,0.9);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        font-size: 0.85rem;
+        text-decoration: none;
+        padding: 0.5rem 0.7rem;
+        border-radius: 40px;
+        transition: 0.2s;
+      }
+
+      .mobile-nav a i {
+        font-size: 1.5rem;
+        margin-bottom: 2px;
+      }
+
+      .mobile-nav a:hover {
+        background: rgba(255,255,255,0.2);
+      }
+
+      body {
+        padding-bottom: 85px;
+      }
+
+      .plans-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .team-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media screen and (min-width: 769px) {
+      .mobile-nav {
+        display: none !important;
+      }
+      body {
+        padding-bottom: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- DESKTOP HEADER -->
+    <header class="desktop-header">
+      <div class="logo-area">
+        <i class="fas fa-bolt logo-icon"></i>
+        <span class="logo-text">SK EDZ</span><span style="font-weight:300; color:#2f638f;">/TEAM</span>
+      </div>
+      <div style="display: flex; gap: 1rem; align-items: center;">
+        <div class="wishlist-header-icon" id="wishlist-header-icon" onclick="window.location.href='wishlist.html'">
+          <i class="fas fa-heart"></i>
+          <span class="wishlist-count-badge" id="wishlist-count-badge">0</span>
+        </div>
+        <div class="desktop-actions">
+        <a href="index.html" class="action-btn"><i class="fas fa-home"></i> HOME</a>
+        <a href="buy.html" class="action-btn"><i class="fas fa-shopping-bag"></i> SHOP</a>
+        <a href="wishlist.html" class="action-btn"><i class="fas fa-heart"></i> WISHLIST</a>
+        <a href="cart.html" class="action-btn"><i class="fas fa-shopping-cart"></i> CART</a>
+        <a href="contact.html" class="action-btn"><i class="fas fa-envelope"></i> CONTACT</a>
+        </div>
+      </div>
+    </header>
+
+    <!-- TEAM HERO -->
+    <section class="team-hero">
+      <span class="badge"><i class="fas fa-users"></i> our team</span>
+      <h1>became a online seller</h1>
+      <p>see the benefits of selling online with SK EDZ</p>
+    </section>
+
+    <!-- TEAM GRID -->
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar">
+          <i class="fas fa-globe"></i>
+        </div>
+        <h3>website </h3>
+        <div class="team-role">online website for free</div>
+        <div class="team-bio">choose the plan subscribe create user profile start selling and get your website.</div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar">
+          <i class="fas fa-money-bill-wave"></i>
+        </div>
+        <h3>earn money </h3>
+        <div class="team-role">easy way to make money</div>
+        <div class="team-bio">0% commission on all sales [pro & premium].</div>
+      </div>
+
+      <div class="team-card">
+        <div class="team-avatar">
+          <i class="fas fa-headset"></i>
+        </div>
+        <h3>quick support</h3>
+        <div class="team-role">easy access to support</div>
+        <div class="team-bio">easy access to support team call support .</div>
+      </div>
+ 
+      
+    </div>
+
+    <!-- SUBSCRIPTION PLANS SECTION -->
+    <div class="plans-section">
+      <div class="section-header">
+        <h2>subscription plans</h2>
+        <p>choose the perfect plan for your needs</p>
+      </div>
+
+      <div class="plans-grid">
+        <!-- Basic Plan -->
+        <div class="plan-card">
+          <div class="plan-icon">
+            <i class="fas fa-seedling"></i>
+          </div>
+          <h3>basic</h3>
+          <div class="plan-price">₹149 <span>/month</span></div>
+          <ul class="plan-features">
+            <li><i class="fas fa-check-circle"></i>20 products per month</li>
+            <li><i class="fas fa-check-circle"></i> 8% commission</li>
+            <li><i class="fas fa-check-circle"></i> call support</li>
+            <li><i class="fas fa-check-circle"></i> website 10₹ per month</li>
+            <li><i class="fas fa-check-circle"></i> 20₹ per card [after you full 20 cards]</li>
+            
+          </ul>
+          <button class="plan-btn" onclick="openWhatsApp('basic', 149)">
+            <i class="fab fa-whatsapp"></i> buy via whatsapp
+          </button>
+        </div>
+
+        <!-- Pro Plan (Popular) -->
+        <div class="plan-card plan-popular">
+          <div class="popular-tag">POPULAR</div>
+          <div class="plan-icon">
+            <i class="fas fa-rocket"></i>
+          </div>
+          <h3>pro</h3>
+          <div class="plan-price">₹250 <span>/month</span></div>
+          <ul class="plan-features">
+            <li><i class="fas fa-check-circle"></i> 50 products per month</li>
+            <li><i class="fas fa-check-circle"></i> 0% commission</li>
+            <li><i class="fas fa-check-circle"></i> premium call support</li>
+            <li><i class="fas fa-check-circle"></i> 100% free website</li>
+            <li><i class="fas fa-check-circle"></i> 2 golden cards [beta soon]</li>
+            <li><i class="fas fa-check-circle"></i> delivery support</li>
+            <li><i class="fas fa-check-circle"></i> 10₹ per card [after you full 50 cards]</li>
+          </ul>
+          <button class="plan-btn plan-btn-wa" onclick="openWhatsApp('pro', 250)">
+            <i class="fab fa-whatsapp"></i> buy via whatsapp
+          </button>
+        </div>
+
+        <!-- Premium Plan -->
+        <div class="plan-card">
+          <div class="plan-icon">
+            <i class="fas fa-crown"></i>
+          </div>
+          <h3>premium</h3>
+          <div class="plan-price">₹399 <span>/month</span></div>
+          <ul class="plan-features">
+            <li><i class="fas fa-check-circle"></i> 100 products per month</li>
+            <li><i class="fas fa-check-circle"></i> 0% commission</li>
+            <li><i class="fas fa-check-circle"></i> 100% free website [GOLDEN VIP]</li>
+            <li><i class="fas fa-check-circle"></i> 5 golden cards [beta soon]</li>
+            <li><i class="fas fa-check-circle"></i> delivery support</li>
+            <li><i class="fas fa-check-circle"></i> priority support</li>
+            <li><i class="fas fa-check-circle"></i> 5₹ per card [after you full 100 cards]</li>
+            <li><i class="fas fa-check-circle"></i>free 7 days sk add [promote your store]</li>
+          </ul>
+          <button class="plan-btn plan-btn-wa" onclick="openWhatsApp('premium', 399)">
+            <i class="fab fa-whatsapp"></i> buy via whatsapp
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer-note">
+      <i class="fas fa-circle-check" style="color: #2d6f9e;"></i> team & subscriptions · same glass theme
+    </div>
+  </div>
+
+  <!-- MOBILE NAVIGATION -->
+  <nav class="mobile-nav">
+    <a href="index.html"><i class="fas fa-house"></i><span>HOME</span></a>
+    <a href="buy.html"><i class="fas fa-shopping-bag"></i><span>SHOP</span></a>
+    <a href="wishlist.html"><i class="fas fa-heart"></i><span>WISHLIST</span></a>
+    <a href="about.html"><i class="fas fa-info-circle"></i><span>ABOUT</span></a>
+    <a href="contact.html"><i class="fas fa-envelope"></i><span>CONTACT</span></a>
+  </nav>
+
+  <script>
+    // Update wishlist badge
+    function updateWishlistBadge() {
+      try {
+        const wishlist = JSON.parse(localStorage.getItem('skedzWishlist')) || [];
+        document.getElementById('wishlist-count-badge').textContent = wishlist.length;
+      } catch (e) {
+        document.getElementById('wishlist-count-badge').textContent = '0';
+      }
+    }
+
+    // WhatsApp function for subscription plans
+    function openWhatsApp(planName, price) {
+      const phoneNumber = "9345306572";
+      
+      // Create message
+      const message = `🛍️ *New Subscription Order*%0a%0a` +
+                      `*Plan:* ${planName}%0a` +
+                      `*Price:* ₹${price}/month%0a` +
+                      `%0a` +
+                      `*Customer Details:*%0a` +
+                      `Name: [Please fill]%0a` +
+                      `Phone: [Please fill]%0a` +
+                      `Email: [Please fill]%0a` +
+                      `%0a` +
+                      `*Additional Notes:*%0a` +
+                      `I want to subscribe to the ${planName} plan`;
+      
+      // Open WhatsApp
+      const whatsappUrl = `https://wa.me/${phoneNumber}?text=${message}`;
+      window.open(whatsappUrl, '_blank');
+    }
+
+    // Mobile nav visual feedback (without blocking navigation)
+    document.querySelectorAll('.mobile-nav a').forEach(link => {
+      link.addEventListener('click', function(e) {
+        // Just visual feedback
+        document.querySelectorAll('.mobile-nav a').forEach(i => i.style.background = '');
+        this.style.background = 'rgba(255,255,255,0.25)';
+        // Let navigation happen naturally
+      });
+    });
+
+    // Initial badge update
+    updateWishlistBadge();
+
+    // Update badge when page becomes visible
+    document.addEventListener('visibilitychange', function() {
+      if (!document.hidden) {
+        updateWishlistBadge();
+      }
+    });
+  </script>
+</body>
+</html>
