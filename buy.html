@@ -146,6 +146,45 @@
       color: transparent;
       margin-bottom: 1rem;
     }
+
+    /* ===== CATEGORY FILTERS ===== */
+    .category-filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin: 1rem 0 2rem 0;
+      justify-content: center;
+    }
+    .category-btn {
+      background: rgba(255,255,255,0.4);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255,255,255,0.7);
+      border-radius: 60px;
+      padding: 0.6rem 1.4rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: #1e3c5c;
+      cursor: pointer;
+      transition: 0.2s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.02);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .category-btn i { color: #2c5779; }
+    .category-btn:hover {
+      background: white;
+      transform: translateY(-2px);
+      border-color: #a0c6e9;
+    }
+    .category-btn.active {
+      background: #1e5a88;
+      color: white;
+      border-color: #1e5a88;
+      box-shadow: 0 8px 16px rgba(30,90,136,0.2);
+    }
+    .category-btn.active i { color: white; }
+
     .product-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -450,6 +489,9 @@
       </div>
     </section>
 
+    <!-- Category filter bar (buttons) -->
+    <div class="category-filters" id="categoryFilters"></div>
+
     <div class="product-grid" id="product-grid">
       <div class="loading-container">
         <div class="loading-spinner"></div>
@@ -515,18 +557,28 @@
         measurementId: "G-FH3CMFTZVQ"
       };
 
-      // Initialize Firebase safely
       if (!firebase.apps.length) {
           firebase.initializeApp(firebaseConfig);
       }
       const database = firebase.database();
       const productsRef = database.ref('products');
 
+      // ========== CATEGORY DISPLAY MAPPING ==========
+      // Maps stored category values to the new display names
+      const categoryDisplayMap = {
+        "electronics": "web",
+        "audio": "app",
+        "wearables": "editing img",
+        "accessories": "editing vid",
+        "lifestyle": "frame"
+      };
+
       // Local state
       let cart = JSON.parse(localStorage.getItem('skedzCart')) || [];
       let wishlist = JSON.parse(localStorage.getItem('skedzWishlist')) || [];
       let currentModalProduct = null;
-      let products = [];
+      let allProducts = [];           // holds all products from Firebase
+      let products = [];              // currently displayed products (filtered or all)
 
       // DOM elements
       const productGrid = document.getElementById('product-grid');
@@ -539,6 +591,7 @@
       const checkoutTotalSpan = document.getElementById('checkoutTotal');
       const checkoutProductInfo = document.getElementById('checkoutProductInfo');
       const wishlistBadge = document.getElementById('wishlist-count-badge');
+      const categoryFiltersDiv = document.getElementById('categoryFilters');
 
       function updateWishlistBadge() {
         wishlistBadge.textContent = wishlist.length;
@@ -656,7 +709,7 @@
         if (e.target === checkoutOverlay) checkoutOverlay.classList.remove('active');
       });
 
-      // ========== FIXED: Centralized rendering function ==========
+      // ========== RENDER PRODUCT CARDS (uses global 'products') ==========
       function renderProductCards() {
         let html = '';
         products.forEach(product => {
@@ -678,7 +731,7 @@
           card.addEventListener('click', (e) => {
             if (e.target.closest('.card-wishlist-btn')) return;
             const id = card.dataset.id;
-            const product = products.find(p => p.id === id);
+            const product = allProducts.find(p => p.id === id) || products.find(p => p.id === id);
             if (product) openFullScreen(product);
           });
         });
@@ -688,34 +741,88 @@
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
             const id = btn.dataset.wishlistId;
-            const product = products.find(p => p.id === id);
+            const product = allProducts.find(p => p.id === id) || products.find(p => p.id === id);
             if (product) toggleWishlist(product);
           });
         });
       }
 
-      
+      // ========== POPULATE CATEGORY FILTERS ==========
+      function populateCategoryFilters() {
+        // Extract unique category *values* from allProducts (ignore empty or undefined)
+        const categoriesSet = new Set();
+        allProducts.forEach(p => {
+          if (p.category && p.category.trim() !== '') categoriesSet.add(p.category);
+        });
+        const categoryValues = Array.from(categoriesSet).sort();
 
+        // If no categories, hide the filter bar
+        if (categoryValues.length === 0) {
+          categoryFiltersDiv.style.display = 'none';
+          return;
+        }
+        categoryFiltersDiv.style.display = 'flex';
+
+        // Build HTML: 'All' button first, then each category button.
+        // The button's data-category is the stored value, but the displayed text is mapped.
+        let html = `<button class="category-btn active" data-category="all"><i class="fas fa-th-large"></i> All</button>`;
+        categoryValues.forEach(value => {
+          const displayName = categoryDisplayMap[value] || value; // fallback to value if not mapped
+          html += `<button class="category-btn" data-category="${value}"><i class="fas fa-tag"></i> ${displayName}</button>`;
+        });
+        categoryFiltersDiv.innerHTML = html;
+
+        // Add click handlers
+        document.querySelectorAll('.category-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            // Remove active class from all buttons
+            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            const selectedCategory = btn.dataset.category;
+            if (selectedCategory === 'all') {
+              products = [...allProducts];
+            } else {
+              products = allProducts.filter(p => p.category === selectedCategory);
+            }
+            renderProductCards();
+          });
+        });
+      }
+
+      // ========== LOAD PRODUCTS FROM FIREBASE ==========
       function loadProducts() {
-        // Try to load from Firebase
         productsRef.once('value').then((snapshot) => {
           const firebaseProducts = snapshot.val();
           
           if (firebaseProducts && Object.keys(firebaseProducts).length > 0) {
-            products = Object.keys(firebaseProducts).map(key => ({
+            allProducts = Object.keys(firebaseProducts).map(key => ({
               id: key,
               ...firebaseProducts[key]
             }));
+            products = [...allProducts]; // start with all products
             renderProductCards();
+            populateCategoryFilters();   // create filter buttons with mapped names
           } else {
             console.log("No products found in Firebase, loading demos.");
             loadFallbackDemo();
           }
         }).catch(error => {
           console.error('Firebase connection error, loading demos instead:', error);
-          // FIXED: Removed the window.location.reload() that was causing the infinite loop
           loadFallbackDemo();
         });
+      }
+
+      // Dummy fallback in case it's not defined (prevents errors)
+      function loadFallbackDemo() {
+        console.warn("Using fallback demo products.");
+        allProducts = [
+          { id: 'demo1', title: 'Demo Web Product', price: 999, image: 'https://via.placeholder.com/400', category: 'electronics' },
+          { id: 'demo2', title: 'Demo App Product', price: 1299, image: 'https://via.placeholder.com/400', category: 'audio' }
+        ];
+        products = [...allProducts];
+        renderProductCards();
+        populateCategoryFilters();
       }
 
       // Initialize
