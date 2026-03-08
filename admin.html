@@ -280,6 +280,33 @@
     }
     #imageFileInput { display: none; }
 
+    /* URL input row */
+    .url-row {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+      align-items: center;
+    }
+    .url-row .form-control { flex: 1; }
+
+    /* Progress bar */
+    .progress-container {
+      margin-top: 15px;
+      display: none;
+    }
+    .progress-bar {
+      height: 6px;
+      background: #1e5a88;
+      width: 0%;
+      border-radius: 10px;
+      transition: width 0.2s;
+    }
+    .progress-text {
+      font-size: 0.9rem;
+      color: #1e5a88;
+      margin-left: 8px;
+    }
+
     /* Products Table */
     .table-container {
       background: rgba(255,255,255,0.25);
@@ -321,7 +348,7 @@
       <header class="admin-header">
         <div class="logo-area">
           <i class="fas fa-bolt logo-icon"></i>
-          <span class="logo-text">SK EDZ<span style="font-weight:300; color:#2f638f;">/admin</span></span>
+          <span class="logo-text">sk edz<span style="font-weight:300; color:#2f638f;">/admin</span></span>
         </div>
         <div class="admin-badge">
           <i class="fas fa-shield-alt"></i> secured
@@ -366,11 +393,11 @@
               <div class="form-group" style="margin:0;">
                 <label>category</label>
                 <select id="productCategory" class="form-control">
-                  <option value="electronics">Electronics</option>
-                  <option value="audio">Audio</option>
-                  <option value="wearables">Wearables</option>
-                  <option value="accessories">Accessories</option>
-                  <option value="lifestyle">Lifestyle</option>
+                  <option value="electronics">web</option>
+                  <option value="audio">app</option>
+                  <option value="wearables">editing img</option>
+                  <option value="accessories">editing vid</option>
+                  <option value="lifestyle">frame</option>
                 </select>
               </div>
             </div>
@@ -382,13 +409,26 @@
           </div>
 
           <div class="form-group" style="flex: 1 1 300px; margin: 0;">
-            <label>product image (drag & drop)</label>
+            <label>product image</label>
             <div class="drop-zone" id="dropZone">
               <i class="fas fa-image drop-zone-icon" id="dropIcon"></i>
               <p class="drop-zone-text" id="dropText">Click or drag image here</p>
               <img src="" alt="Preview" class="image-preview" id="imagePreview">
               <input type="file" id="imageFileInput" accept="image/*">
             </div>
+            <!-- New URL input row -->
+            <div class="url-row">
+              <input type="text" id="imageUrlInput" class="form-control" placeholder="Or paste image URL...">
+              <button type="button" id="loadUrlBtn" class="btn-secondary"><i class="fas fa-eye"></i> Preview</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress indicator -->
+        <div class="progress-container" id="progressContainer">
+          <div style="display: flex; align-items: center;">
+            <div class="progress-bar" id="progressBar"></div>
+            <span class="progress-text" id="progressText"></span>
           </div>
         </div>
 
@@ -469,14 +509,19 @@
       if (e.key === 'Enter') submitBtn.click();
     });
 
-    // ========== DRAG & DROP IMAGE HANDLER ==========
+    // ========== IMAGE HANDLING (FILE + URL) ==========
     const dropZone = document.getElementById('dropZone');
     const fileInput = document.getElementById('imageFileInput');
     const imagePreview = document.getElementById('imagePreview');
     const dropText = document.getElementById('dropText');
     const dropIcon = document.getElementById('dropIcon');
-    let selectedImageFile = null;
+    const imageUrlInput = document.getElementById('imageUrlInput');
+    const loadUrlBtn = document.getElementById('loadUrlBtn');
 
+    let selectedImageFile = null;      // for file upload
+    let selectedImageUrl = null;       // for direct URL
+
+    // Drag & drop / file selection
     dropZone.addEventListener('click', () => fileInput.click());
 
     dropZone.addEventListener('dragover', (e) => {
@@ -492,22 +537,26 @@
       e.preventDefault();
       dropZone.classList.remove('dragover');
       if (e.dataTransfer.files.length) {
-        handleImageSelection(e.dataTransfer.files[0]);
+        handleFileSelection(e.dataTransfer.files[0]);
       }
     });
 
     fileInput.addEventListener('change', () => {
       if (fileInput.files.length) {
-        handleImageSelection(fileInput.files[0]);
+        handleFileSelection(fileInput.files[0]);
       }
     });
 
-    function handleImageSelection(file) {
+    function handleFileSelection(file) {
       if (!file.type.startsWith('image/')) {
         alert('Please select a valid image file (JPG, PNG, etc).');
         return;
       }
+      // Clear URL mode
+      selectedImageUrl = null;
+      imageUrlInput.value = '';
       selectedImageFile = file;
+
       const reader = new FileReader();
       reader.onload = (e) => {
         imagePreview.src = e.target.result;
@@ -518,41 +567,102 @@
       reader.readAsDataURL(file);
     }
 
-    // ========== UPLOAD PRODUCT ==========
+    // URL preview button
+    loadUrlBtn.addEventListener('click', () => {
+      const url = imageUrlInput.value.trim();
+      if (!url) {
+        alert('Please enter an image URL');
+        return;
+      }
+      // Test if URL loads
+      const testImg = new Image();
+      testImg.onload = () => {
+        // Valid image
+        selectedImageUrl = url;
+        selectedImageFile = null;           // clear any file
+        fileInput.value = '';               // reset file input
+        imagePreview.src = url;
+        imagePreview.style.display = 'block';
+        dropText.style.display = 'none';
+        dropIcon.style.display = 'none';
+      };
+      testImg.onerror = () => {
+        alert('The URL does not point to a valid image (failed to load).');
+      };
+      testImg.src = url;
+    });
+
+    // ========== UPLOAD PRODUCT (with progress for file) ==========
     document.getElementById('uploadProductBtn').addEventListener('click', async () => {
       const title = document.getElementById('productTitle').value.trim();
       const price = parseInt(document.getElementById('productPrice').value);
       const category = document.getElementById('productCategory').value;
       const description = document.getElementById('productDescription').value.trim();
       const uploadStatus = document.getElementById('uploadStatus');
+      const progressContainer = document.getElementById('progressContainer');
+      const progressBar = document.getElementById('progressBar');
+      const progressText = document.getElementById('progressText');
 
       // Validation
       if (!title) return alert('Please enter product title');
       if (!price || price <= 0) return alert('Please enter a valid price');
       if (!description) return alert('Please enter product description');
-      if (!selectedImageFile) return alert('Please select or drop an image for the product');
+      if (!selectedImageFile && !selectedImageUrl) {
+        return alert('Please select an image file OR provide an image URL');
+      }
 
-      uploadStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading image to storage...';
-      
+      // Reset progress
+      progressContainer.style.display = 'block';
+      progressBar.style.width = '0%';
+      progressText.textContent = '0%';
+
       try {
-        // 1. Upload Image to Firebase Storage
-        const fileName = Date.now() + '_' + selectedImageFile.name;
-        const storageRef = storage.ref('products/' + fileName);
-        await storageRef.put(selectedImageFile);
-        
-        uploadStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching image URL...';
-        const downloadURL = await storageRef.getDownloadURL();
+        let downloadURL = '';
+
+        // Case 1: File upload with progress
+        if (selectedImageFile) {
+          uploadStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading image to storage...';
+          
+          const fileName = Date.now() + '_' + selectedImageFile.name;
+          const storageRef = storage.ref('products/' + fileName);
+          const uploadTask = storageRef.put(selectedImageFile);
+
+          // Progress monitoring
+          uploadTask.on('state_changed', 
+            (snapshot) => {
+              const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              progressBar.style.width = progress + '%';
+              progressText.textContent = Math.round(progress) + '%';
+            },
+            (error) => {
+              throw error;
+            }
+          );
+
+          await uploadTask;
+          
+          uploadStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching image URL...';
+          downloadURL = await storageRef.getDownloadURL();
+        } 
+        // Case 2: Direct URL
+        else if (selectedImageUrl) {
+          downloadURL = selectedImageUrl;
+          // No progress needed for URL, but we show a quick message
+          uploadStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Using provided image URL...';
+          // Short delay for UX
+          await new Promise(resolve => setTimeout(resolve, 500));
+        }
 
         uploadStatus.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving product details...';
         
-        // 2. Save Data to Firebase Realtime Database
+        // Save to database
         const newProductRef = productsRef.push();
         await newProductRef.set({
           id: newProductRef.key,
           title: title,
           price: price,
           category: category,
-          image: downloadURL, // Save the actual URL from storage
+          image: downloadURL,
           description: description,
           timestamp: Date.now(),
           dateAdded: new Date().toISOString()
@@ -560,20 +670,26 @@
         
         uploadStatus.innerHTML = '✅ Product added successfully!';
         
-        // 3. Reset Form
+        // Reset form
         document.getElementById('productTitle').value = '';
         document.getElementById('productPrice').value = '';
         document.getElementById('productDescription').value = '';
         
-        // Reset Image zone
+        // Reset image fields
         selectedImageFile = null;
+        selectedImageUrl = null;
         fileInput.value = '';
+        imageUrlInput.value = '';
         imagePreview.style.display = 'none';
         imagePreview.src = '';
         dropText.style.display = 'block';
         dropIcon.style.display = 'block';
         
-        // Reload table
+        // Hide progress
+        progressContainer.style.display = 'none';
+        progressBar.style.width = '0%';
+        
+        // Reload table & stats
         await loadProducts();
         await loadStats();
         
@@ -583,6 +699,7 @@
         console.error('Upload error:', error);
         uploadStatus.innerHTML = '❌ Error: ' + error.message;
         uploadStatus.style.color = '#c13b6f';
+        progressContainer.style.display = 'none';
       }
     });
 
