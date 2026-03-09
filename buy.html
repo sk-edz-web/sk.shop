@@ -89,11 +89,11 @@
       border-color: #a0c6e9;
       transform: scale(1.02);
     }
-    /* Wishlist heart in header */
-    .wishlist-header-icon {
+    /* Wishlist & Cart header icons */
+    .header-icon {
       position: relative;
       font-size: 1.6rem;
-      color: #c13b6f;
+      color: #1e3c5c;
       background: rgba(255,255,255,0.5);
       width: 48px; height: 48px;
       border-radius: 50%;
@@ -103,9 +103,10 @@
       border: 1px solid rgba(255,255,255,0.7);
       transition: 0.2s;
       cursor: pointer;
+      text-decoration: none;
     }
-    .wishlist-header-icon:hover { background: white; transform: scale(1.05); }
-    .wishlist-count-badge {
+    .header-icon:hover { background: white; transform: scale(1.05); }
+    .header-icon .badge {
       position: absolute;
       top: -5px; right: -5px;
       background: #1e5a88;
@@ -118,6 +119,11 @@
       align-items: center;
       justify-content: center;
       border: 2px solid white;
+    }
+    .icon-group {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
     }
     /* ----- MOBILE NAVIGATION ----- */
     .mobile-nav { display: none; }
@@ -507,13 +513,21 @@
         <span class="logo-text">SK EDZ<span style="font-weight:300; color:#2f638f;">/shop</span></span>
       </div>
       <div style="display: flex; gap: 1rem; align-items: center;">
-        <div class="wishlist-header-icon" id="wishlist-header-icon" onclick="window.location.href='wishlist.html'">
-          <i class="fas fa-heart"></i>
-          <span class="wishlist-count-badge" id="wishlist-count-badge">0</span>
+        <div class="icon-group">
+          <!-- Wishlist icon with badge -->
+          <a href="wishlist.html" class="header-icon" id="wishlist-header-icon">
+            <i class="fas fa-heart"></i>
+            <span class="badge" id="wishlist-count-badge">0</span>
+          </a>
+          <!-- Cart icon with badge (new) -->
+          <a href="cart.html" class="header-icon" id="cart-header-icon">
+            <i class="fas fa-shopping-cart"></i>
+            <span class="badge" id="cart-count-badge">0</span>
+          </a>
         </div>
         <div class="desktop-actions">
           <a href="index.html" class="action-btn"><i class="fas fa-home"></i> Home</a>
-         <a href="buy.html" class="action-btn" style="background: #1e5a88; color: white;"><i class="fas fa-shopping-bag"></i> SHOP</a>
+          <a href="buy.html" class="action-btn" style="background: #1e5a88; color: white;"><i class="fas fa-shopping-bag"></i> SHOP</a>
           <a href="wishlist.html" class="action-btn"><i class="fas fa-heart"></i> Wishlist</a>
           <a href="cart.html" class="action-btn"><i class="fas fa-shopping-cart"></i> Cart</a>
           <a href="contact.html" class="action-btn"><i class="fas fa-envelope"></i> Contact</a>
@@ -604,308 +618,4 @@
       }
       const database = firebase.database();
       const productsRef = database.ref('products');
-      // ========== ADDED: orders reference ==========
-      const ordersRef = database.ref('orders');
-
-      // ========== CATEGORY DISPLAY MAPPING ==========
-      const categoryDisplayMap = {
-        "electronics": "web",
-        "audio": "app",
-        "wearables": "editing img",
-        "accessories": "editing vid",
-        "lifestyle": "frame"
-      };
-
-      // Local state
-      let cart = JSON.parse(localStorage.getItem('skedzCart')) || [];
-      let wishlist = JSON.parse(localStorage.getItem('skedzWishlist')) || [];
-      let currentModalProduct = null;
-      let allProducts = [];
-      let products = [];
-
-      // DOM elements
-      const productGrid = document.getElementById('product-grid');
-      const modalOverlay = document.getElementById('productModal');
-      const checkoutOverlay = document.getElementById('checkoutModal');
-      const modalContent = document.getElementById('modalProductContent');
-      const closeModalBtn = document.getElementById('closeModalBtn');
-      const cancelCheckoutBtn = document.getElementById('cancelCheckoutBtn');
-      const placeOrderBtn = document.getElementById('placeOrderBtn');
-      const checkoutTotalSpan = document.getElementById('checkoutTotal');
-      const checkoutProductInfo = document.getElementById('checkoutProductInfo');
-      const wishlistBadge = document.getElementById('wishlist-count-badge');
-      const categoryFiltersDiv = document.getElementById('categoryFilters');
-      const toastContainer = document.getElementById('toastContainer');
-
-      // ========== ORDER MANAGEMENT ==========
-      function getNextOrderNumber() {
-        let counter = localStorage.getItem('skedzOrderCounter');
-        if (!counter) {
-          counter = 1;
-        } else {
-          counter = parseInt(counter, 10) + 1;
-        }
-        localStorage.setItem('skedzOrderCounter', counter);
-        return counter;
-      }
-
-      // OLD localStorage save removed – we now use Firebase directly
-
-      function showOrderToast(orderNumber) {
-        const toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.innerHTML = `<i class="fas fa-check-circle" style="color:#ffc107;"></i> ✅ Order placed #${orderNumber}! Our team will reach you soon.`;
-        toastContainer.appendChild(toast);
-
-        setTimeout(() => {
-          if (toast.parentNode) toast.remove();
-        }, 3000);
-      }
-
-      function updateWishlistBadge() {
-        wishlistBadge.textContent = wishlist.length;
-      }
-
-      function addToCart(product) {
-        if (!cart.find(p => p.id === product.id)) {
-          cart.push({ 
-            id: product.id, 
-            title: product.title, 
-            price: product.price, 
-            image: product.image,
-            quantity: 1 
-          });
-          localStorage.setItem('skedzCart', JSON.stringify(cart));
-          alert('✅ Added to cart');
-        } else {
-          alert('🛒 Already in cart');
-        }
-      }
-
-      function toggleWishlist(product) {
-        const index = wishlist.findIndex(p => p.id === product.id);
-        if (index === -1) {
-          wishlist.push({ 
-            id: product.id, 
-            title: product.title, 
-            price: product.price, 
-            image: product.image 
-          });
-          alert('❤️ Added to wishlist');
-        } else {
-          wishlist.splice(index, 1);
-          alert('💔 Removed from wishlist');
-        }
-        localStorage.setItem('skedzWishlist', JSON.stringify(wishlist));
-        updateWishlistBadge();
-      }
-
-      function openFullScreen(product) {
-        currentModalProduct = product;
-        modalContent.innerHTML = `
-          <div class="modal-product-image"><img src="${product.image}" alt="${product.title}" onerror="this.src='https://via.placeholder.com/400'"></div>
-          <div class="modal-title">${product.title}</div>
-          <div class="modal-price">₹${product.price}</div>
-          <div class="modal-description">${product.description || 'No description available'}</div>
-          <div class="modal-actions">
-            <button class="modal-btn btn-add-cart" id="modalAddToCart"><i class="fas fa-shopping-cart"></i> Add to Cart</button>
-            <button class="modal-btn btn-buy-now" id="modalBuyNow"><i class="fas fa-bolt"></i> Buy Now</button>
-          </div>
-        `;
-        modalOverlay.classList.add('active');
-
-        document.getElementById('modalAddToCart').addEventListener('click', (e) => {
-          e.stopPropagation();
-          addToCart(product);
-        });
-
-        document.getElementById('modalBuyNow').addEventListener('click', (e) => {
-          e.stopPropagation();
-          modalOverlay.classList.remove('active');
-          openCheckout(product);
-        });
-      }
-
-      function openCheckout(product) {
-        checkoutProductInfo.innerHTML = `<p style="font-weight: 600; margin-bottom: 0.8rem;">${product.title} · ₹${product.price}</p>`;
-        checkoutTotalSpan.textContent = `Total: ₹${product.price}`;
-        checkoutOverlay.classList.add('active');
-      }
-
-      closeModalBtn.addEventListener('click', () => {
-        modalOverlay.classList.remove('active');
-      });
-
-      cancelCheckoutBtn.addEventListener('click', () => {
-        checkoutOverlay.classList.remove('active');
-      });
-
-      // ========== MODIFIED PLACE ORDER HANDLER (SAVES TO FIREBASE) ==========
-      placeOrderBtn.addEventListener('click', async () => {
-        const name = document.getElementById('fullName').value.trim();
-        const phone = document.getElementById('phoneNumber').value.trim();
-        const address = document.getElementById('address').value.trim();
-
-        if (!name || !phone || !address) {
-          alert('Please fill all details');
-          return;
-        }
-
-        if (!currentModalProduct) return;
-
-        const product = currentModalProduct;
-        const total = product.price;
-        
-        const orderNumber = getNextOrderNumber().toString().padStart(3, '0');
-        const orderData = {
-          orderId: `#${orderNumber}`,
-          customer: name,
-          phone: phone,
-          address: address,
-          product: product.title,
-          price: total,
-          timestamp: Date.now()  // numeric timestamp for proper sorting
-        };
-
-        try {
-          // Save to Firebase
-          await ordersRef.push(orderData);
-
-          // Show success toast
-          showOrderToast(orderNumber);
-
-          // Close modal and clear fields
-          checkoutOverlay.classList.remove('active');
-          document.getElementById('fullName').value = '';
-          document.getElementById('phoneNumber').value = '';
-          document.getElementById('address').value = '';
-        } catch (error) {
-          console.error('Order failed:', error);
-          alert('Order could not be saved. Please try again.');
-        }
-      });
-
-      modalOverlay.addEventListener('click', (e) => {
-        if (e.target === modalOverlay) modalOverlay.classList.remove('active');
-      });
-      
-      checkoutOverlay.addEventListener('click', (e) => {
-        if (e.target === checkoutOverlay) checkoutOverlay.classList.remove('active');
-      });
-
-      // ========== RENDER PRODUCT CARDS ==========
-      function renderProductCards() {
-        let html = '';
-        products.forEach(product => {
-          html += `
-            <div class="product-card" data-id="${product.id}">
-              <div class="product-image">
-                <img src="${product.image || 'https://via.placeholder.com/400'}" alt="${product.title}" onerror="this.src='https://via.placeholder.com/400'">
-              </div>
-              <h3 class="product-title">${product.title}</h3>
-              <div class="product-price">₹${product.price}</div>
-              <button class="card-wishlist-btn" data-wishlist-id="${product.id}"><i class="fas fa-heart"></i> Wishlist</button>
-            </div>
-          `;
-        });
-        productGrid.innerHTML = html;
-
-        document.querySelectorAll('.product-card').forEach(card => {
-          card.addEventListener('click', (e) => {
-            if (e.target.closest('.card-wishlist-btn')) return;
-            const id = card.dataset.id;
-            const product = allProducts.find(p => p.id === id) || products.find(p => p.id === id);
-            if (product) openFullScreen(product);
-          });
-        });
-
-        document.querySelectorAll('.card-wishlist-btn').forEach(btn => {
-          btn.addEventListener('click', (e) => {
-            e.stopPropagation();
-            const id = btn.dataset.wishlistId;
-            const product = allProducts.find(p => p.id === id) || products.find(p => p.id === id);
-            if (product) toggleWishlist(product);
-          });
-        });
-      }
-
-      // ========== POPULATE CATEGORY FILTERS ==========
-      function populateCategoryFilters() {
-        const categoriesSet = new Set();
-        allProducts.forEach(p => {
-          if (p.category && p.category.trim() !== '') categoriesSet.add(p.category);
-        });
-        const categoryValues = Array.from(categoriesSet).sort();
-
-        if (categoryValues.length === 0) {
-          categoryFiltersDiv.style.display = 'none';
-          return;
-        }
-        categoryFiltersDiv.style.display = 'flex';
-
-        let html = `<button class="category-btn active" data-category="all"><i class="fas fa-th-large"></i> All</button>`;
-        categoryValues.forEach(value => {
-          const displayName = categoryDisplayMap[value] || value;
-          html += `<button class="category-btn" data-category="${value}"><i class="fas fa-tag"></i> ${displayName}</button>`;
-        });
-        categoryFiltersDiv.innerHTML = html;
-
-        document.querySelectorAll('.category-btn').forEach(btn => {
-          btn.addEventListener('click', () => {
-            document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            const selectedCategory = btn.dataset.category;
-            if (selectedCategory === 'all') {
-              products = [...allProducts];
-            } else {
-              products = allProducts.filter(p => p.category === selectedCategory);
-            }
-            renderProductCards();
-          });
-        });
-      }
-
-      // ========== LOAD PRODUCTS FROM FIREBASE ==========
-      function loadProducts() {
-        productsRef.once('value').then((snapshot) => {
-          const firebaseProducts = snapshot.val();
-          
-          if (firebaseProducts && Object.keys(firebaseProducts).length > 0) {
-            allProducts = Object.keys(firebaseProducts).map(key => ({
-              id: key,
-              ...firebaseProducts[key]
-            }));
-            products = [...allProducts];
-            renderProductCards();
-            populateCategoryFilters();
-          } else {
-            console.log("No products found in Firebase, loading demos.");
-            loadFallbackDemo();
-          }
-        }).catch(error => {
-          console.error('Firebase connection error, loading demos instead:', error);
-          loadFallbackDemo();
-        });
-      }
-
-      function loadFallbackDemo() {
-        console.warn("Using fallback demo products.");
-        allProducts = [
-          { id: 'demo1', title: 'Demo Web Product', price: 999, image: 'https://via.placeholder.com/400', category: 'electronics' },
-          { id: 'demo2', title: 'Demo App Product', price: 1299, image: 'https://via.placeholder.com/400', category: 'audio' }
-        ];
-        products = [...allProducts];
-        renderProductCards();
-        populateCategoryFilters();
-      }
-
-      // Initialize
-      loadProducts();
-      updateWishlistBadge();
-
-    })();
-  </script>
-</body>
-</html>
-
+  
