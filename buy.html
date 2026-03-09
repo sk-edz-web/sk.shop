@@ -12,7 +12,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
   <style>
-    /* === RESET + GLOBAL === */
+    /* === YOUR EXACT ORIGINAL STYLES (unchanged) === */
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
       font-family: 'Inter', sans-serif;
@@ -274,7 +274,7 @@
       color: #a12b5a;
       transform: scale(1.02);
     }
-    /* Full-screen modal */
+    /* Full-screen modal (original small size) */
     .modal-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -341,7 +341,7 @@
     .btn-add-cart { background: rgba(43, 98, 142, 0.8); color: white; }
     .btn-buy-now { background: #1e5a88; color: white; }
     .modal-btn:hover { transform: scale(1.02); filter: brightness(1.05); }
-    /* Checkout Modal (WhatsApp form) */
+    /* Checkout Modal (WhatsApp form) - original */
     .checkout-overlay {
       position: fixed;
       top: 0; left: 0;
@@ -377,7 +377,46 @@
     .form-control:focus { background: white; }
     .checkout-total { font-size: 1.4rem; font-weight: 700; color: #102b40; margin: 1rem 0; text-align: right; }
     .checkout-actions { display: flex; gap: 1rem; margin-top: 1.5rem; }
-    .btn-green { background: #25D366; color: white; border: none; }
+    .btn-place-order { background: #1e5a88; color: white; border: none; }
+
+    /* Toast notification (new) */
+    .toast-container {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      pointer-events: none;
+    }
+    .toast {
+      background: #1e5a88;
+      color: white;
+      padding: 1rem 2rem;
+      border-radius: 60px;
+      font-weight: 600;
+      box-shadow: 0 15px 25px -8px rgba(0,40,80,0.4);
+      margin-bottom: 0.5rem;
+      animation: slideUp 0.3s ease, fadeOut 0.3s ease 2.7s forwards;
+      border-left: 6px solid #ffc107;
+      backdrop-filter: blur(10px);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      pointer-events: auto;
+      max-width: 90%;
+      font-size: 1rem;
+    }
+    @keyframes slideUp {
+      from { transform: translateY(30px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+    @keyframes fadeOut {
+      to { opacity: 0; transform: translateY(-10px); }
+    }
+
     /* Footer */
     .footer-note {
       margin-top: 4rem; padding: 1.8rem 0.5rem;
@@ -512,6 +551,9 @@
     <a href="contact.html"><i class="fas fa-envelope"></i><span>contact</span></a>
   </nav>
 
+  <!-- Toast container for order confirmations -->
+  <div class="toast-container" id="toastContainer"></div>
+
   <div class="modal-overlay" id="productModal">
     <div class="modal-content">
       <button class="modal-close" id="closeModalBtn"><i class="fas fa-times"></i></button>
@@ -538,7 +580,7 @@
       <div class="checkout-total" id="checkoutTotal">Total: ₹0</div>
       <div class="checkout-actions">
         <button class="modal-btn btn-add-cart" id="cancelCheckoutBtn">Back</button>
-        <button class="modal-btn btn-green" id="sendWhatsAppBtn"><i class="fab fa-whatsapp"></i> Buy via WhatsApp</button>
+        <button class="modal-btn btn-place-order" id="placeOrderBtn"><i class="fas fa-check-circle"></i> Place Order</button>
       </div>
     </div>
   </div>
@@ -562,9 +604,10 @@
       }
       const database = firebase.database();
       const productsRef = database.ref('products');
+      // ========== ADDED: orders reference ==========
+      const ordersRef = database.ref('orders');
 
       // ========== CATEGORY DISPLAY MAPPING ==========
-      // Maps stored category values to the new display names
       const categoryDisplayMap = {
         "electronics": "web",
         "audio": "app",
@@ -577,8 +620,8 @@
       let cart = JSON.parse(localStorage.getItem('skedzCart')) || [];
       let wishlist = JSON.parse(localStorage.getItem('skedzWishlist')) || [];
       let currentModalProduct = null;
-      let allProducts = [];           // holds all products from Firebase
-      let products = [];              // currently displayed products (filtered or all)
+      let allProducts = [];
+      let products = [];
 
       // DOM elements
       const productGrid = document.getElementById('product-grid');
@@ -587,11 +630,37 @@
       const modalContent = document.getElementById('modalProductContent');
       const closeModalBtn = document.getElementById('closeModalBtn');
       const cancelCheckoutBtn = document.getElementById('cancelCheckoutBtn');
-      const sendWhatsAppBtn = document.getElementById('sendWhatsAppBtn');
+      const placeOrderBtn = document.getElementById('placeOrderBtn');
       const checkoutTotalSpan = document.getElementById('checkoutTotal');
       const checkoutProductInfo = document.getElementById('checkoutProductInfo');
       const wishlistBadge = document.getElementById('wishlist-count-badge');
       const categoryFiltersDiv = document.getElementById('categoryFilters');
+      const toastContainer = document.getElementById('toastContainer');
+
+      // ========== ORDER MANAGEMENT ==========
+      function getNextOrderNumber() {
+        let counter = localStorage.getItem('skedzOrderCounter');
+        if (!counter) {
+          counter = 1;
+        } else {
+          counter = parseInt(counter, 10) + 1;
+        }
+        localStorage.setItem('skedzOrderCounter', counter);
+        return counter;
+      }
+
+      // OLD localStorage save removed – we now use Firebase directly
+
+      function showOrderToast(orderNumber) {
+        const toast = document.createElement('div');
+        toast.className = 'toast';
+        toast.innerHTML = `<i class="fas fa-check-circle" style="color:#ffc107;"></i> ✅ Order placed #${orderNumber}! Our team will reach you soon.`;
+        toastContainer.appendChild(toast);
+
+        setTimeout(() => {
+          if (toast.parentNode) toast.remove();
+        }, 3000);
+      }
 
       function updateWishlistBadge() {
         wishlistBadge.textContent = wishlist.length;
@@ -671,7 +740,8 @@
         checkoutOverlay.classList.remove('active');
       });
 
-      sendWhatsAppBtn.addEventListener('click', () => {
+      // ========== MODIFIED PLACE ORDER HANDLER (SAVES TO FIREBASE) ==========
+      placeOrderBtn.addEventListener('click', async () => {
         const name = document.getElementById('fullName').value.trim();
         const phone = document.getElementById('phoneNumber').value.trim();
         const address = document.getElementById('address').value.trim();
@@ -686,19 +756,33 @@
         const product = currentModalProduct;
         const total = product.price;
         
-        const message = `🛍️ *New Order from SK EDZ*%0a%0a*Name:* ${name}%0a*Phone:* ${phone}%0a*Address:* ${address}%0a%0a*Product:* ${product.title}%0a*Price:* ₹${total}%0a`;
-        
-        const whatsappNumber = "9345306572";
-        const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${message}`;
-        
-        window.open(whatsappUrl, '_blank');
-        checkoutOverlay.classList.remove('active');
-        
-        document.getElementById('fullName').value = '';
-        document.getElementById('phoneNumber').value = '';
-        document.getElementById('address').value = '';
+        const orderNumber = getNextOrderNumber().toString().padStart(3, '0');
+        const orderData = {
+          orderId: `#${orderNumber}`,
+          customer: name,
+          phone: phone,
+          address: address,
+          product: product.title,
+          price: total,
+          timestamp: Date.now()  // numeric timestamp for proper sorting
+        };
 
-        alert('✅ WhatsApp opened with your order!');
+        try {
+          // Save to Firebase
+          await ordersRef.push(orderData);
+
+          // Show success toast
+          showOrderToast(orderNumber);
+
+          // Close modal and clear fields
+          checkoutOverlay.classList.remove('active');
+          document.getElementById('fullName').value = '';
+          document.getElementById('phoneNumber').value = '';
+          document.getElementById('address').value = '';
+        } catch (error) {
+          console.error('Order failed:', error);
+          alert('Order could not be saved. Please try again.');
+        }
       });
 
       modalOverlay.addEventListener('click', (e) => {
@@ -709,7 +793,7 @@
         if (e.target === checkoutOverlay) checkoutOverlay.classList.remove('active');
       });
 
-      // ========== RENDER PRODUCT CARDS (uses global 'products') ==========
+      // ========== RENDER PRODUCT CARDS ==========
       function renderProductCards() {
         let html = '';
         products.forEach(product => {
@@ -726,7 +810,6 @@
         });
         productGrid.innerHTML = html;
 
-        // Attach events to all newly created cards
         document.querySelectorAll('.product-card').forEach(card => {
           card.addEventListener('click', (e) => {
             if (e.target.closest('.card-wishlist-btn')) return;
@@ -736,7 +819,6 @@
           });
         });
 
-        // Attach wishlist events
         document.querySelectorAll('.card-wishlist-btn').forEach(btn => {
           btn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -749,33 +831,27 @@
 
       // ========== POPULATE CATEGORY FILTERS ==========
       function populateCategoryFilters() {
-        // Extract unique category *values* from allProducts (ignore empty or undefined)
         const categoriesSet = new Set();
         allProducts.forEach(p => {
           if (p.category && p.category.trim() !== '') categoriesSet.add(p.category);
         });
         const categoryValues = Array.from(categoriesSet).sort();
 
-        // If no categories, hide the filter bar
         if (categoryValues.length === 0) {
           categoryFiltersDiv.style.display = 'none';
           return;
         }
         categoryFiltersDiv.style.display = 'flex';
 
-        // Build HTML: 'All' button first, then each category button.
-        // The button's data-category is the stored value, but the displayed text is mapped.
         let html = `<button class="category-btn active" data-category="all"><i class="fas fa-th-large"></i> All</button>`;
         categoryValues.forEach(value => {
-          const displayName = categoryDisplayMap[value] || value; // fallback to value if not mapped
+          const displayName = categoryDisplayMap[value] || value;
           html += `<button class="category-btn" data-category="${value}"><i class="fas fa-tag"></i> ${displayName}</button>`;
         });
         categoryFiltersDiv.innerHTML = html;
 
-        // Add click handlers
         document.querySelectorAll('.category-btn').forEach(btn => {
           btn.addEventListener('click', () => {
-            // Remove active class from all buttons
             document.querySelectorAll('.category-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
 
@@ -800,9 +876,9 @@
               id: key,
               ...firebaseProducts[key]
             }));
-            products = [...allProducts]; // start with all products
+            products = [...allProducts];
             renderProductCards();
-            populateCategoryFilters();   // create filter buttons with mapped names
+            populateCategoryFilters();
           } else {
             console.log("No products found in Firebase, loading demos.");
             loadFallbackDemo();
@@ -813,7 +889,6 @@
         });
       }
 
-      // Dummy fallback in case it's not defined (prevents errors)
       function loadFallbackDemo() {
         console.warn("Using fallback demo products.");
         allProducts = [
