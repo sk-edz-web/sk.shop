@@ -165,57 +165,95 @@
             padding-left: 1rem;
             margin-top: 0.5rem;
         }
+
+        /* ========== NEW CARD GRID STYLES (Amazon/Flipkart style) ========== */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 2rem;
+            grid-template-columns: repeat(4, 1fr); /* Desktop: 4 fixed columns */
+            gap: 1.5rem;
         }
+
         .product-card {
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(12px);
-            border-radius: 28px;
+            background: #ffffff;
+            border-radius: 12px; /* Amazon style sharp/round corners */
             overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.02);
-            border: 1px solid rgba(255,255,255,0.6);
-            transform: translateY(0);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 1px solid #e0e0e0;
+            display: flex;
+            flex-direction: column;
             cursor: pointer;
         }
+
         .product-card:hover {
-            transform: translateY(-8px);
-            background: rgba(255, 255, 255, 0.6);
-            box-shadow: 0 25px 35px -12px rgba(0, 0, 0, 0.2);
-            border-color: rgba(255,255,255,0.9);
+            transform: translateY(-4px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
         }
-        /* FIX: Perfectly responsive product image – fills width, maintains 4:3 ratio, never distorted */
+
         .product-img {
-            display: block;
             width: 100%;
-            height: auto;
-            aspect-ratio: 4 / 3;
-            object-fit: cover;
-            background: #eef2f7;
-            transition: transform 0.5s ease;
+            aspect-ratio: 1 / 1; /* Square image like Amazon/Flipkart */
+            object-fit: contain; /* Image cut aagama muzhusa theriyum */
+            background: #f9f9f9;
+            padding: 10px;
         }
-        .product-card:hover .product-img {
-            transform: scale(1.05);
-        }
+
         .product-info {
-            padding: 1.4rem 1.2rem 1.6rem;
+            padding: 12px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
+
         .product-title {
-            font-weight: 700;
-            font-size: 1.2rem;
-            margin-bottom: 0.5rem;
-            color: #1f2b38;
-            word-break: break-word;
+            font-weight: 500;
+            font-size: 0.95rem;
+            color: #111;
+            margin-bottom: 4px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2; /* 2 lines mela ponal hide aagum */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
+
         .product-price {
-            font-weight: 800;
-            font-size: 1.5rem;
-            color: #1f3b4c;
-            margin: 0.6rem 0;
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: #111;
         }
+
+        /* 📱 MOBILE VIEW FIX (Amazon/Flipkart Style) */
+        @media (max-width: 768px) {
+            .products-grid {
+                grid-template-columns: repeat(2, 1fr); /* Mobile-la 2 cards side-by-side */
+                gap: 8px; /* Chinna gap for clean look */
+                padding: 5px;
+            }
+
+            .product-card {
+                border-radius: 8px;
+            }
+
+            .product-info {
+                padding: 8px;
+            }
+
+            .product-title {
+                font-size: 0.85rem;
+                height: 2.4em; /* Title alignment maintain panna */
+            }
+
+            .product-price {
+                font-size: 1rem;
+            }
+            
+            .container {
+                padding: 0 0.5rem 2rem;
+            }
+        }
+        /* ========== END NEW CARD GRID STYLES ========== */
+
         .product-detail-view {
             display: none;
             background: rgba(255,255,255,0.95);
@@ -242,10 +280,11 @@
             display: block;
             width: 100%;
             height: auto;
-            aspect-ratio: 4 / 3;
-            object-fit: cover;
+            aspect-ratio: 1 / 1;
+            object-fit: contain;
             border-radius: 24px;
-            background: #eef2f7;
+            background: #f9f9f9;
+            padding: 10px;
         }
         .detail-info {
             flex: 2;
@@ -350,8 +389,9 @@
             width: 60px;
             height: 60px;
             border-radius: 16px;
-            object-fit: cover;
+            object-fit: contain;
             background: #f1f5f9;
+            padding: 4px;
         }
         .cart-item-details {
             flex: 2;
@@ -497,84 +537,19 @@
             padding: 3rem;
             color: #1f3b4c;
         }
-
-        /* Enhanced mobile responsiveness – cards adjust perfectly on small screens */
+        /* Additional small device adjustments for detail view */
         @media (max-width: 640px) {
-            .nav-container {
-                padding: 0.8rem 1.2rem;
-            }
-            .hero {
-                margin: 0 0.8rem 1.5rem 0.8rem;
-                padding: 2rem 1rem;
-            }
-            .hero h2 { font-size: 1.6rem; }
-            .container {
-                padding: 0 1rem 2rem;
-            }
-            .products-grid {
-                gap: 1.2rem;
-                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            }
-            /* Card image remains crisp and ratio intact */
-            .product-img {
-                aspect-ratio: 4 / 3;
-                width: 100%;
-            }
-            .product-info {
-                padding: 1rem 1rem 1.3rem;
-            }
-            .product-title {
-                font-size: 1rem;
-            }
-            .product-price {
-                font-size: 1.3rem;
-            }
-            .cart-modal-content, .customer-modal-content {
-                width: 95%;
-                max-height: 90vh;
-            }
             .detail-content {
                 flex-direction: column;
             }
             .detail-image {
                 min-width: 100%;
             }
-            .detail-image img {
-                aspect-ratio: 4 / 3;
-                width: 100%;
-            }
             .detail-info h2 {
                 font-size: 1.6rem;
             }
             .detail-price {
                 font-size: 1.6rem;
-            }
-            .category-control {
-                width: 100%;
-                justify-content: center;
-            }
-        }
-
-        /* Extra small devices (phones under 480px) – single column, image fits perfectly */
-        @media (max-width: 480px) {
-            .products-grid {
-                grid-template-columns: 1fr;
-                gap: 1rem;
-            }
-            .product-card {
-                max-width: 100%;
-                margin: 0 auto;
-            }
-            .product-img {
-                aspect-ratio: 4 / 3;
-                width: 100%;
-                object-fit: cover;
-            }
-            .cart-item {
-                flex-wrap: wrap;
-            }
-            .cart-item-actions {
-                margin-left: auto;
             }
         }
     </style>
@@ -603,7 +578,7 @@
 <div class="hero">
     <div class="hero-badge"><i class="fas fa-rocket"></i> Start your e‑commerce journey</div>
     <h2>Elevate your brand with premium editing products</h2>
-    <p>High-quality digital assets • Instant delivery • 30-day guarantee</p>
+    <p>High-quality digital assets • Instant delivery </p>
 </div>
 
 <main class="container">
@@ -678,7 +653,7 @@
 <div id="toastMsg" class="toast-notify">✨ Item added to cart</div>
 
 <script>
-    // Firebase Configuration (unchanged)
+    // Firebase Configuration
     const firebaseConfig = {
         apiKey: "AIzaSyD4FPU1uapSWjbpyR1Jjf854T7V4qMV-TM",
         authDomain: "skedz-a13eb.firebaseapp.com",
@@ -750,8 +725,8 @@
         const products = getCurrentProducts();
         if (!products.length) {
             grid.innerHTML = currentCategory === 'sk' 
-                ? '<div class="empty-cart-msg">📦 No SK.Products yet. Add products via Admin Panel.</div>'
-                : '<div class="empty-cart-msg">🌟 No Other Creator products yet. Add products via Admin Panel.</div>';
+                ? '<div class="empty-cart-msg">📦 soon.</div>'
+                : '<div class="empty-cart-msg">🌟 No Other Creator products yet. join as a creator and upload your own card.</div>';
             return;
         }
         
@@ -761,7 +736,7 @@
             card.className = 'product-card';
             card.setAttribute('data-id', prod.id);
             card.innerHTML = `
-                <img class="product-img" src="${prod.image}" alt="${prod.name}" loading="lazy" onerror="this.src='https://placehold.co/600x450?text=Skedz'">
+                <img class="product-img" src="${prod.image}" alt="${prod.name}" loading="lazy" onerror="this.src='https://placehold.co/600x600?text=Skedz'">
                 <div class="product-info">
                     <div class="product-title">${escapeHtml(prod.name)}</div>
                     <div class="product-price">${formatPrice(prod.price)}</div>
@@ -786,7 +761,7 @@
             <div class="back-button" id="backToGridBtn"><i class="fas fa-arrow-left"></i> Back to products</div>
             <div class="detail-content">
                 <div class="detail-image">
-                    <img src="${product.image}" alt="${product.name}" onerror="this.src='https://placehold.co/600x450?text=Skedz'">
+                    <img src="${product.image}" alt="${product.name}" onerror="this.src='https://placehold.co/600x600?text=Skedz'">
                 </div>
                 <div class="detail-info">
                     <h2>${escapeHtml(product.name)}</h2>
@@ -857,7 +832,7 @@
         cart.forEach(item => {
             html += `
                 <div class="cart-item">
-                    <img class="cart-item-img" src="${item.image}" style="width:50px; height:50px; object-fit:cover; border-radius:12px">
+                    <img class="cart-item-img" src="${item.image}" style="width:50px; height:50px; object-fit:contain; border-radius:12px; background:#f1f5f9; padding:4px;">
                     <div class="cart-item-details">
                         <div class="cart-item-name">${escapeHtml(item.name)}</div>
                         <div class="cart-item-price">${formatPrice(item.price)}</div>
