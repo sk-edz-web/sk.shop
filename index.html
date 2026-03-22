@@ -189,11 +189,14 @@
             box-shadow: 0 25px 35px -12px rgba(0, 0, 0, 0.2);
             border-color: rgba(255,255,255,0.9);
         }
+        /* FIX: Mobile-friendly product image — maintains perfect aspect ratio and responsiveness */
         .product-img {
             width: 100%;
-            height: 240px;
+            height: auto;
+            aspect-ratio: 4 / 3;
             object-fit: cover;
             transition: transform 0.5s ease;
+            display: block;
         }
         .product-card:hover .product-img {
             transform: scale(1.05);
@@ -206,6 +209,7 @@
             font-size: 1.2rem;
             margin-bottom: 0.5rem;
             color: #1f2b38;
+            word-break: break-word;
         }
         .product-price {
             font-weight: 800;
@@ -239,6 +243,8 @@
             width: 100%;
             border-radius: 24px;
             object-fit: cover;
+            aspect-ratio: 4 / 3;
+            display: block;
         }
         .detail-info {
             flex: 2;
@@ -246,6 +252,7 @@
         .detail-info h2 {
             font-size: 2rem;
             margin-bottom: 1rem;
+            word-break: break-word;
         }
         .detail-price {
             font-size: 2rem;
@@ -351,6 +358,7 @@
         .cart-item-name {
             font-weight: 600;
             font-size: 0.95rem;
+            word-break: break-word;
         }
         .cart-item-price {
             font-weight: 700;
@@ -488,6 +496,8 @@
             padding: 3rem;
             color: #1f3b4c;
         }
+
+        /* EXTRA MOBILE POLISH: ensures card images are crisp and grid spacing comfortable on narrow devices */
         @media (max-width: 640px) {
             .nav-container {
                 padding: 0.8rem 1.2rem;
@@ -502,9 +512,17 @@
             }
             .products-grid {
                 gap: 1.2rem;
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             }
-            .product-img {
-                height: 200px;
+            /* image maintains aspect ratio automatically, no fixed height needed */
+            .product-info {
+                padding: 1rem 1rem 1.3rem;
+            }
+            .product-title {
+                font-size: 1rem;
+            }
+            .product-price {
+                font-size: 1.3rem;
             }
             .cart-modal-content, .customer-modal-content {
                 width: 95%;
@@ -516,9 +534,36 @@
             .detail-image {
                 min-width: 100%;
             }
+            .detail-image img {
+                aspect-ratio: 4 / 3;
+                width: 100%;
+            }
+            .detail-info h2 {
+                font-size: 1.6rem;
+            }
+            .detail-price {
+                font-size: 1.6rem;
+            }
             .category-control {
                 width: 100%;
                 justify-content: center;
+            }
+        }
+
+        /* For very small devices (below 400px), ensure card doesn't overflow */
+        @media (max-width: 480px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .product-card {
+                max-width: 100%;
+            }
+            .cart-item {
+                flex-wrap: wrap;
+            }
+            .cart-item-actions {
+                margin-left: auto;
             }
         }
     </style>
@@ -685,7 +730,6 @@
     }
 
     function getCurrentProducts() {
-        // Filter products by selected category
         return allProducts.filter(p => p.creator === currentCategory);
     }
 
@@ -719,7 +763,7 @@
             card.className = 'product-card';
             card.setAttribute('data-id', prod.id);
             card.innerHTML = `
-                <img class="product-img" src="${prod.image}" alt="${prod.name}" loading="lazy" onerror="this.src='https://placehold.co/300x300?text=Skedz'">
+                <img class="product-img" src="${prod.image}" alt="${prod.name}" loading="lazy" onerror="this.src='https://placehold.co/600x450?text=Skedz'">
                 <div class="product-info">
                     <div class="product-title">${escapeHtml(prod.name)}</div>
                     <div class="product-price">${formatPrice(prod.price)}</div>
@@ -749,7 +793,7 @@
             <div class="back-button" id="backToGridBtn"><i class="fas fa-arrow-left"></i> Back to products</div>
             <div class="detail-content">
                 <div class="detail-image">
-                    <img src="${product.image}" alt="${product.name}" onerror="this.src='https://placehold.co/400x400?text=Skedz'">
+                    <img src="${product.image}" alt="${product.name}" onerror="this.src='https://placehold.co/600x450?text=Skedz'">
                 </div>
                 <div class="detail-info">
                     <h2>${escapeHtml(product.name)}</h2>
@@ -1021,23 +1065,15 @@
         renderProductsGrid();
     }
 
-    // Initialize everything
+    // Initialize
     document.addEventListener("DOMContentLoaded", () => {
         loadCartFromLocal();
         loadCustomerDetails();
-        
-        // Start real-time listener for products
         listenToProducts();
-        
-        // Set category description
         document.getElementById("categoryDesc").innerHTML = categoryDescriptions.sk;
-        
-        // Category dropdown event
         document.getElementById("categorySelect").addEventListener("change", (e) => {
             setCategory(e.target.value);
         });
-        
-        // Cart events
         document.getElementById("cartIconBtn").addEventListener("click", openCartModal);
         document.getElementById("closeModalBtn").addEventListener("click", closeCartModal);
         document.getElementById("continueShoppingBtn").addEventListener("click", closeCartModal);
@@ -1046,8 +1082,6 @@
         document.getElementById("cartModal").addEventListener("click", (e) => {
             if (e.target === document.getElementById("cartModal")) closeCartModal();
         });
-        
-        // Customer modal events
         document.getElementById("closeCustomerModalBtn").addEventListener("click", hideCustomerModal);
         document.getElementById("cancelCustomerBtn").addEventListener("click", hideCustomerModal);
         document.getElementById("submitCustomerBtn").addEventListener("click", onCustomerSubmit);
