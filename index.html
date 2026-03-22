@@ -166,10 +166,10 @@
             margin-top: 0.5rem;
         }
 
-        /* ========== NEW CARD GRID STYLES (Amazon/Flipkart style) ========== */
+        /* Grid setup for Desktop and Mobile */
         .products-grid {
             display: grid;
-            grid-template-columns: repeat(4, 1fr); /* Desktop: 4 fixed columns */
+            grid-template-columns: repeat(4, 1fr); /* Desktop: 4 cards fixed */
             gap: 1.5rem;
         }
 
@@ -205,17 +205,18 @@
             flex-direction: column;
             justify-content: space-between;
         }
-
-        .product-title {
-            font-weight: 500;
-            font-size: 0.95rem;
-            color: #111;
-            margin-bottom: 4px;
-            display: -webkit-box;
-            -webkit-line-clamp: 2; /* 2 lines mela ponal hide aagum */
-            -webkit-box-orient: vertical;
-            overflow: hidden;
-        }
+.product-title {
+    font-weight: 500;
+    font-size: 0.95rem;
+    color: #111;
+    margin-bottom: 4px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2; 
+    line-clamp: 2; 
+    height: 2.6em; 
+}
 
         .product-price {
             font-weight: 700;
@@ -226,33 +227,27 @@
         /* 📱 MOBILE VIEW FIX (Amazon/Flipkart Style) */
         @media (max-width: 768px) {
             .products-grid {
-                grid-template-columns: repeat(2, 1fr); /* Mobile-la 2 cards side-by-side */
-                gap: 8px; /* Chinna gap for clean look */
+                grid-template-columns: repeat(2, 1fr); /* Mobile: 2 cards side-by-side */
+                gap: 8px;
                 padding: 5px;
             }
-
             .product-card {
                 border-radius: 8px;
             }
-
             .product-info {
                 padding: 8px;
             }
-
             .product-title {
                 font-size: 0.85rem;
-                height: 2.4em; /* Title alignment maintain panna */
+                height: 2.4em;
             }
-
             .product-price {
                 font-size: 1rem;
             }
-            
             .container {
                 padding: 0 0.5rem 2rem;
             }
         }
-        /* ========== END NEW CARD GRID STYLES ========== */
 
         .product-detail-view {
             display: none;
@@ -537,7 +532,6 @@
             padding: 3rem;
             color: #1f3b4c;
         }
-        /* Additional small device adjustments for detail view */
         @media (max-width: 640px) {
             .detail-content {
                 flex-direction: column;
@@ -578,7 +572,7 @@
 <div class="hero">
     <div class="hero-badge"><i class="fas fa-rocket"></i> Start your e‑commerce journey</div>
     <h2>Elevate your brand with premium editing products</h2>
-    <p>High-quality digital assets • Instant delivery </p>
+    <p>High-quality digital assets • Instant delivery • 30-day guarantee</p>
 </div>
 
 <main class="container">
@@ -725,8 +719,8 @@
         const products = getCurrentProducts();
         if (!products.length) {
             grid.innerHTML = currentCategory === 'sk' 
-                ? '<div class="empty-cart-msg">📦 soon.</div>'
-                : '<div class="empty-cart-msg">🌟 No Other Creator products yet. join as a creator and upload your own card.</div>';
+                ? '<div class="empty-cart-msg">📦 No SK.Products yet. Add products via Admin Panel.</div>'
+                : '<div class="empty-cart-msg">🌟 No Other Creator products yet. Add products via Admin Panel.</div>';
             return;
         }
         
@@ -780,20 +774,35 @@
             showToast(`${product.name} added to cart`);
         });
         document.getElementById("detailBuyNowBtn").addEventListener("click", () => {
-            addToCart(product.id);
-            handleCheckout();
+            // FIX: Replace cart with exactly 1 quantity of this product before checkout
+            buyNow(product.id);
         });
     }
 
+    // Add to cart (increment quantity if already exists)
     function addToCart(productId) {
         const product = getCurrentProducts().find(p => p.id === productId);
         if (!product) return;
         const existing = cart.find(i => i.id === productId);
-        if (existing) existing.quantity += 1;
-        else cart.push({ id: product.id, name: product.name, price: product.price, quantity: 1, image: product.image });
+        if (existing) {
+            existing.quantity += 1;
+        } else {
+            cart.push({ id: product.id, name: product.name, price: product.price, quantity: 1, image: product.image });
+        }
         saveCartToLocal();
         showToast(`${product.name} added to cart`);
         if (document.getElementById("cartModal").classList.contains("active")) renderCartModal();
+    }
+
+    // Buy Now: sets cart to a single item (quantity 1) and proceeds to checkout
+    function buyNow(productId) {
+        const product = getCurrentProducts().find(p => p.id === productId);
+        if (!product) return;
+        // Replace cart with exactly this product, quantity 1
+        cart = [{ id: product.id, name: product.name, price: product.price, quantity: 1, image: product.image }];
+        saveCartToLocal();
+        showToast(`Proceeding to checkout with ${product.name}`);
+        handleCheckout(); // direct checkout
     }
 
     function updateQuantity(productId, delta) {
