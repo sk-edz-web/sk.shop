@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=yes">
     <meta name="google-site-verification" content="googlefd8a1dd7d340a87c" />
-    <meta name="google-site-verification"...>
     <title>Skedz | Start E-Commerce & Buy Premium Editing Products</title>
     <meta name="title" content="Skedz | Start E-Commerce & Buy Premium Editing Products">
     <meta name="description" content="Launch your e-commerce business with Skedz. Shop our premium digital assets, video editing tools, and high-quality products to elevate your brand online.">
@@ -20,7 +19,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="icon" href="logo.jpg">
-    <meta name="google-site-verification" content="googlefd8a1dd7d340a87c" />
     <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
@@ -189,14 +187,15 @@
             box-shadow: 0 25px 35px -12px rgba(0, 0, 0, 0.2);
             border-color: rgba(255,255,255,0.9);
         }
-        /* FIX: Mobile-friendly product image — maintains perfect aspect ratio and responsiveness */
+        /* FIX: Perfectly responsive product image – fills width, maintains 4:3 ratio, never distorted */
         .product-img {
+            display: block;
             width: 100%;
             height: auto;
             aspect-ratio: 4 / 3;
             object-fit: cover;
+            background: #eef2f7;
             transition: transform 0.5s ease;
-            display: block;
         }
         .product-card:hover .product-img {
             transform: scale(1.05);
@@ -240,11 +239,13 @@
             min-width: 250px;
         }
         .detail-image img {
-            width: 100%;
-            border-radius: 24px;
-            object-fit: cover;
-            aspect-ratio: 4 / 3;
             display: block;
+            width: 100%;
+            height: auto;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            border-radius: 24px;
+            background: #eef2f7;
         }
         .detail-info {
             flex: 2;
@@ -497,7 +498,7 @@
             color: #1f3b4c;
         }
 
-        /* EXTRA MOBILE POLISH: ensures card images are crisp and grid spacing comfortable on narrow devices */
+        /* Enhanced mobile responsiveness – cards adjust perfectly on small screens */
         @media (max-width: 640px) {
             .nav-container {
                 padding: 0.8rem 1.2rem;
@@ -514,7 +515,11 @@
                 gap: 1.2rem;
                 grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             }
-            /* image maintains aspect ratio automatically, no fixed height needed */
+            /* Card image remains crisp and ratio intact */
+            .product-img {
+                aspect-ratio: 4 / 3;
+                width: 100%;
+            }
             .product-info {
                 padding: 1rem 1rem 1.3rem;
             }
@@ -550,7 +555,7 @@
             }
         }
 
-        /* For very small devices (below 400px), ensure card doesn't overflow */
+        /* Extra small devices (phones under 480px) – single column, image fits perfectly */
         @media (max-width: 480px) {
             .products-grid {
                 grid-template-columns: 1fr;
@@ -558,6 +563,12 @@
             }
             .product-card {
                 max-width: 100%;
+                margin: 0 auto;
+            }
+            .product-img {
+                aspect-ratio: 4 / 3;
+                width: 100%;
+                object-fit: cover;
             }
             .cart-item {
                 flex-wrap: wrap;
@@ -667,7 +678,7 @@
 <div id="toastMsg" class="toast-notify">✨ Item added to cart</div>
 
 <script>
-    // Firebase Configuration
+    // Firebase Configuration (unchanged)
     const firebaseConfig = {
         apiKey: "AIzaSyD4FPU1uapSWjbpyR1Jjf854T7V4qMV-TM",
         authDomain: "skedz-a13eb.firebaseapp.com",
@@ -678,13 +689,11 @@
         measurementId: "G-R65D4WMB14"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    console.log("✅ Firebase initialized");
 
-    let allProducts = []; // All products from Firebase (both categories)
-    let currentCategory = 'sk'; // 'sk' or 'creators'
+    let allProducts = [];
+    let currentCategory = 'sk';
     let currentView = 'grid';
     let selectedProduct = null;
     let cart = [];
@@ -695,7 +704,6 @@
         creators: "Discover unique digital products from talented creators worldwide. Each asset is vetted for quality and comes with commercial licenses."
     };
 
-    // REAL-TIME PRODUCT LISTENER - Loads ALL products from Firestore
     function listenToProducts() {
         db.collection("products").onSnapshot((snapshot) => {
             allProducts = [];
@@ -711,21 +719,15 @@
                 });
             });
             allProducts.sort((a, b) => a.id - b.id);
-            console.log(`✅ Loaded ${allProducts.length} total products from Firebase`);
-            console.log(`   - SK.Products: ${allProducts.filter(p => p.creator === 'sk').length}`);
-            console.log(`   - Other Creators: ${allProducts.filter(p => p.creator === 'creators').length}`);
-            
-            // Re-render current view
-            if (currentView === 'grid') {
-                renderProductsGrid();
-            } else if (currentView === 'detail' && selectedProduct) {
-                const updatedProduct = allProducts.find(p => p.id === selectedProduct.id);
-                if (updatedProduct) showProductDetail(updatedProduct.id);
+            if (currentView === 'grid') renderProductsGrid();
+            else if (currentView === 'detail' && selectedProduct) {
+                const updated = allProducts.find(p => p.id === selectedProduct.id);
+                if (updated) showProductDetail(updated.id);
             }
         }, (error) => {
-            console.error("Firestore listener error:", error);
-            showToast("Connection issue. Please refresh the page.");
-            document.getElementById("productGrid").innerHTML = '<div class="empty-cart-msg">⚠️ Failed to connect to Firebase. Check your internet connection.</div>';
+            console.error("Firestore error:", error);
+            showToast("Connection issue. Please refresh.");
+            document.getElementById("productGrid").innerHTML = '<div class="empty-cart-msg">⚠️ Failed to connect to Firebase.</div>';
         });
     }
 
@@ -741,19 +743,15 @@
         const grid = document.getElementById("productGrid");
         const detailView = document.getElementById("productDetail");
         if (!grid) return;
-        
         grid.style.display = "grid";
         detailView.classList.remove("active");
         currentView = 'grid';
         
         const products = getCurrentProducts();
-        
-        if (!products || products.length === 0) {
-            if (currentCategory === 'sk') {
-                grid.innerHTML = '<div class="empty-cart-msg">📦 No SK.Products yet. Go to Admin Panel and add products with category "SK.Products"!</div>';
-            } else {
-                grid.innerHTML = '<div class="empty-cart-msg">🌟 No Other Creator products yet. Go to Admin Panel and add products with category "Other Creators"!</div>';
-            }
+        if (!products.length) {
+            grid.innerHTML = currentCategory === 'sk' 
+                ? '<div class="empty-cart-msg">📦 No SK.Products yet. Add products via Admin Panel.</div>'
+                : '<div class="empty-cart-msg">🌟 No Other Creator products yet. Add products via Admin Panel.</div>';
             return;
         }
         
@@ -769,20 +767,15 @@
                     <div class="product-price">${formatPrice(prod.price)}</div>
                 </div>
             `;
-            card.addEventListener('click', (e) => {
-                e.stopPropagation();
-                showProductDetail(prod.id);
-            });
+            card.addEventListener('click', () => showProductDetail(prod.id));
             grid.appendChild(card);
         });
     }
 
     function showProductDetail(productId) {
-        const products = getCurrentProducts();
-        const product = products.find(p => p.id === productId);
+        const product = getCurrentProducts().find(p => p.id === productId);
         if (!product) return;
         selectedProduct = product;
-        
         const grid = document.getElementById("productGrid");
         const detailView = document.getElementById("productDetail");
         grid.style.display = "none";
@@ -798,7 +791,7 @@
                 <div class="detail-info">
                     <h2>${escapeHtml(product.name)}</h2>
                     <div class="detail-price">${formatPrice(product.price)}</div>
-                    <div class="detail-description">${escapeHtml(product.description || "Premium digital asset for creators. High quality, instant download, and lifetime access.")}</div>
+                    <div class="detail-description">${escapeHtml(product.description)}</div>
                     <div class="detail-actions">
                         <button class="btn-primary" id="detailAddToCartBtn">Add to Cart</button>
                         <button class="btn-secondary" id="detailBuyNowBtn">Buy Now</button>
@@ -806,10 +799,7 @@
                 </div>
             </div>
         `;
-        
-        document.getElementById("backToGridBtn").addEventListener("click", () => {
-            renderProductsGrid();
-        });
+        document.getElementById("backToGridBtn").addEventListener("click", renderProductsGrid);
         document.getElementById("detailAddToCartBtn").addEventListener("click", () => {
             addToCart(product.id);
             showToast(`${product.name} added to cart`);
@@ -821,15 +811,11 @@
     }
 
     function addToCart(productId) {
-        const products = getCurrentProducts();
-        const product = products.find(p => p.id === productId);
+        const product = getCurrentProducts().find(p => p.id === productId);
         if (!product) return;
         const existing = cart.find(i => i.id === productId);
-        if (existing) {
-            existing.quantity += 1;
-        } else {
-            cart.push({ id: product.id, name: product.name, price: product.price, quantity: 1, image: product.image });
-        }
+        if (existing) existing.quantity += 1;
+        else cart.push({ id: product.id, name: product.name, price: product.price, quantity: 1, image: product.image });
         saveCartToLocal();
         showToast(`${product.name} added to cart`);
         if (document.getElementById("cartModal").classList.contains("active")) renderCartModal();
@@ -870,7 +856,7 @@
         let html = '';
         cart.forEach(item => {
             html += `
-                <div class="cart-item" data-id="${item.id}">
+                <div class="cart-item">
                     <img class="cart-item-img" src="${item.image}" style="width:50px; height:50px; object-fit:cover; border-radius:12px">
                     <div class="cart-item-details">
                         <div class="cart-item-name">${escapeHtml(item.name)}</div>
@@ -889,24 +875,18 @@
         const total = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
         totalSpan.innerText = formatPrice(total);
         
-        document.querySelectorAll('.dec-qty').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                updateQuantity(parseInt(btn.dataset.id), -1);
-            });
-        });
-        document.querySelectorAll('.inc-qty').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                updateQuantity(parseInt(btn.dataset.id), 1);
-            });
-        });
-        document.querySelectorAll('.remove-item').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.stopPropagation();
-                removeCartItem(parseInt(btn.dataset.id));
-            });
-        });
+        document.querySelectorAll('.dec-qty').forEach(btn => btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            updateQuantity(parseInt(btn.dataset.id), -1);
+        }));
+        document.querySelectorAll('.inc-qty').forEach(btn => btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            updateQuantity(parseInt(btn.dataset.id), 1);
+        }));
+        document.querySelectorAll('.remove-item').forEach(btn => btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            removeCartItem(parseInt(btn.dataset.id));
+        }));
     }
 
     function saveCartToLocal() {
@@ -916,10 +896,8 @@
 
     function loadCartFromLocal() {
         const stored = localStorage.getItem("skedz_cart");
-        if (stored) {
-            try { cart = JSON.parse(stored); } catch(e) { cart = []; }
-            cart = cart.filter(i => i.quantity > 0);
-        } else { cart = []; }
+        if (stored) { try { cart = JSON.parse(stored); } catch(e) { cart = []; } cart = cart.filter(i => i.quantity > 0); }
+        else cart = [];
         updateCartBadge();
     }
 
@@ -930,20 +908,16 @@
 
     function loadCustomerDetails() {
         const stored = localStorage.getItem("skedz_customer");
-        if (stored) {
-            try { customerDetails = JSON.parse(stored); } catch(e) { customerDetails = null; }
-        } else { customerDetails = null; }
+        if (stored) try { customerDetails = JSON.parse(stored); } catch(e) { customerDetails = null; }
+        else customerDetails = null;
     }
 
-    function saveCustomerDetailsLocally(details) {
-        localStorage.setItem("skedz_customer", JSON.stringify(details));
-    }
+    function saveCustomerDetailsLocally(details) { localStorage.setItem("skedz_customer", JSON.stringify(details)); }
 
     function showCustomerModal() {
         document.getElementById("customerModal").classList.add("active");
         document.body.style.overflow = "hidden";
     }
-
     function hideCustomerModal() {
         document.getElementById("customerModal").classList.remove("active");
         document.body.style.overflow = "";
@@ -954,32 +928,18 @@
         const mobile = document.getElementById("custMobile").value.trim();
         const email = document.getElementById("custEmail").value.trim();
         const card = document.getElementById("custCard").value.trim();
-
-        if (!name || !mobile || !email) {
-            showToast("Please fill in all required fields (Name, Mobile, Email)");
-            return false;
-        }
-        if (!/^\d{10,15}$/.test(mobile.replace(/\D/g, ''))) {
-            showToast("Please enter a valid mobile number (digits only, 10-15 digits)");
-            return false;
-        }
-        if (!/^\S+@\S+\.\S+$/.test(email)) {
-            showToast("Please enter a valid email address");
-            return false;
-        }
-
+        if (!name || !mobile || !email) { showToast("Please fill Name, Mobile, Email"); return false; }
+        if (!/^\d{10,15}$/.test(mobile.replace(/\D/g, ''))) { showToast("Valid mobile number required"); return false; }
+        if (!/^\S+@\S+\.\S+$/.test(email)) { showToast("Valid email required"); return false; }
         customerDetails = { name, mobile, email, card: card || "" };
         saveCustomerDetailsLocally(customerDetails);
         return true;
     }
 
     async function placeOrder() {
-        if (cart.length === 0) {
-            showToast("Your cart is empty!");
-            return false;
-        }
-        const orderItems = cart.map(item => ({ name: item.name, price: item.price, quantity: item.quantity }));
-        const total = cart.reduce((sum, i) => sum + (i.price * i.quantity), 0);
+        if (cart.length === 0) { showToast("Cart empty"); return false; }
+        const orderItems = cart.map(i => ({ name: i.name, price: i.price, quantity: i.quantity }));
+        const total = cart.reduce((s, i) => s + (i.price * i.quantity), 0);
         const orderData = {
             id: Date.now(),
             date: new Date().toLocaleString(),
@@ -995,23 +955,16 @@
             showToast(`✅ Order placed! Total ${formatPrice(total)}`);
             return true;
         } catch (error) {
-            console.error("Error placing order:", error);
-            showToast("❌ Failed to place order. Please try again.");
+            console.error(error);
+            showToast("❌ Failed to place order.");
             return false;
         }
     }
 
     async function handleCheckout() {
-        if (cart.length === 0) {
-            showToast("Your cart is empty!");
-            return;
-        }
-        if (!customerDetails) {
-            showCustomerModal();
-        } else {
-            const success = await placeOrder();
-            if (success) closeCartModal();
-        }
+        if (cart.length === 0) { showToast("Cart empty"); return; }
+        if (!customerDetails) showCustomerModal();
+        else { if (await placeOrder()) closeCartModal(); }
     }
 
     async function onCustomerSubmit() {
@@ -1027,19 +980,16 @@
         renderCartModal();
         document.body.style.overflow = "hidden";
     }
-    
     function closeCartModal() {
         document.getElementById("cartModal").classList.remove("active");
         document.body.style.overflow = "";
     }
-
     function showToast(msg) {
         const toast = document.getElementById("toastMsg");
         toast.innerText = msg;
         toast.classList.add("show");
         setTimeout(() => toast.classList.remove("show"), 2500);
     }
-
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, function(m) {
@@ -1049,45 +999,30 @@
             return m;
         });
     }
-
     function setCategory(category) {
         currentCategory = category;
-        const select = document.getElementById("categorySelect");
-        if (select) select.value = category;
-        const title = document.getElementById("sectionTitle");
-        const descDiv = document.getElementById("categoryDesc");
-        if (category === 'sk') {
-            title.innerHTML = "🔥 SK.Products";
-        } else {
-            title.innerHTML = "🌟 Other Creators";
-        }
-        descDiv.innerHTML = categoryDescriptions[category];
+        document.getElementById("categorySelect").value = category;
+        document.getElementById("sectionTitle").innerHTML = category === 'sk' ? "🔥 SK.Products" : "🌟 Other Creators";
+        document.getElementById("categoryDesc").innerHTML = categoryDescriptions[category];
         renderProductsGrid();
     }
 
-    // Initialize
     document.addEventListener("DOMContentLoaded", () => {
         loadCartFromLocal();
         loadCustomerDetails();
         listenToProducts();
         document.getElementById("categoryDesc").innerHTML = categoryDescriptions.sk;
-        document.getElementById("categorySelect").addEventListener("change", (e) => {
-            setCategory(e.target.value);
-        });
+        document.getElementById("categorySelect").addEventListener("change", e => setCategory(e.target.value));
         document.getElementById("cartIconBtn").addEventListener("click", openCartModal);
         document.getElementById("closeModalBtn").addEventListener("click", closeCartModal);
         document.getElementById("continueShoppingBtn").addEventListener("click", closeCartModal);
         document.getElementById("checkoutBtn").addEventListener("click", handleCheckout);
         document.getElementById("clearCartBtn").addEventListener("click", clearCart);
-        document.getElementById("cartModal").addEventListener("click", (e) => {
-            if (e.target === document.getElementById("cartModal")) closeCartModal();
-        });
+        document.getElementById("cartModal").addEventListener("click", e => { if (e.target === document.getElementById("cartModal")) closeCartModal(); });
         document.getElementById("closeCustomerModalBtn").addEventListener("click", hideCustomerModal);
         document.getElementById("cancelCustomerBtn").addEventListener("click", hideCustomerModal);
         document.getElementById("submitCustomerBtn").addEventListener("click", onCustomerSubmit);
-        document.getElementById("customerModal").addEventListener("click", (e) => {
-            if (e.target === document.getElementById("customerModal")) hideCustomerModal();
-        });
+        document.getElementById("customerModal").addEventListener("click", e => { if (e.target === document.getElementById("customerModal")) hideCustomerModal(); });
     });
 </script>
 </body>
